@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
-import { ArrowDown } from "lucide-react";
+import { ArrowDown, Play } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -10,56 +10,48 @@ const Hero = () => {
   const heroRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const subtitleRef = useRef<HTMLParagraphElement>(null);
-  const descRef = useRef<HTMLParagraphElement>(null);
-  const buttonsRef = useRef<HTMLDivElement>(null);
+  const labelRef = useRef<HTMLDivElement>(null);
+  const overlayRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Initial entrance animations
-      gsap.from(titleRef.current, {
+      // Dramatic entrance animations
+      gsap.from(labelRef.current, {
         opacity: 0,
-        y: 100,
-        duration: 1.2,
+        x: -100,
+        duration: 1,
         ease: "power4.out",
+      });
+
+      gsap.from(titleRef.current?.children || [], {
+        opacity: 0,
+        y: 200,
+        stagger: 0.1,
+        duration: 1.4,
+        ease: "power4.out",
+        delay: 0.2,
       });
 
       gsap.from(subtitleRef.current, {
         opacity: 0,
         y: 50,
         duration: 1,
-        delay: 0.3,
+        delay: 0.8,
         ease: "power3.out",
       });
 
-      gsap.from(descRef.current, {
-        opacity: 0,
-        y: 50,
-        duration: 1,
-        delay: 0.5,
-        ease: "power3.out",
-      });
-
-      gsap.from(buttonsRef.current, {
-        opacity: 0,
-        y: 30,
-        duration: 1,
-        delay: 0.7,
-        ease: "power3.out",
-      });
-
-      // Parallax scroll effect
-      gsap.to(heroRef.current, {
+      // Parallax effects
+      gsap.to(overlayRef.current, {
         scrollTrigger: {
           trigger: heroRef.current,
           start: "top top",
           end: "bottom top",
           scrub: true,
         },
-        y: 300,
-        opacity: 0.3,
+        y: 200,
+        opacity: 0,
       });
 
-      // Title scale on scroll
       gsap.to(titleRef.current, {
         scrollTrigger: {
           trigger: heroRef.current,
@@ -67,7 +59,8 @@ const Hero = () => {
           end: "bottom top",
           scrub: true,
         },
-        scale: 1.5,
+        scale: 1.2,
+        y: 100,
       });
     }, heroRef);
 
@@ -85,50 +78,62 @@ const Hero = () => {
     <section
       id="home"
       ref={heroRef}
-      className="min-h-screen flex items-center justify-center relative overflow-hidden"
+      className="min-h-screen flex items-end relative overflow-hidden pb-32"
     >
-      <div className="absolute inset-0 bg-gradient-to-b from-background via-background/95 to-background" />
+      {/* Gradient overlay */}
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/80 to-background z-[1]" />
+      
+      {/* Enhanced shader background visibility */}
+      <div className="absolute inset-0 z-0" />
 
-      <div className="container mx-auto px-4 relative z-10">
-        <div className="max-w-4xl mx-auto text-center">
-          <h1
-            ref={titleRef}
-            className="text-7xl md:text-9xl font-bold tracking-tighter mb-6 bg-gradient-to-r from-foreground via-primary to-foreground bg-clip-text text-transparent will-change-transform"
-          >
-            TAR1K
-          </h1>
-
-          <p
-            ref={subtitleRef}
-            className="text-xl md:text-2xl text-muted-foreground mb-4"
-          >
+      <div 
+        ref={overlayRef}
+        className="container mx-auto px-6 md:px-12 relative z-10"
+      >
+        {/* Editorial label */}
+        <div 
+          ref={labelRef}
+          className="mb-8 flex items-center gap-4"
+        >
+          <div className="h-px w-12 bg-primary" />
+          <span className="text-xs md:text-sm font-semibold tracking-[0.3em] text-primary uppercase">
             Musical Artist
+          </span>
+        </div>
+
+        {/* Hero title with editorial style */}
+        <h1
+          ref={titleRef}
+          className="text-[clamp(4rem,15vw,12rem)] font-black tracking-tighter leading-[0.85] mb-8 will-change-transform"
+        >
+          <div className="overflow-hidden">
+            <span className="block text-primary">TAR1K</span>
+          </div>
+        </h1>
+
+        {/* Subtitle with dramatic styling */}
+        <div 
+          ref={subtitleRef}
+          className="max-w-2xl"
+        >
+          <p className="text-lg md:text-2xl text-foreground/80 font-light mb-12 leading-relaxed">
+            Exploring sound, rhythm, and storytelling through innovative musical expression
           </p>
 
-          <p
-            ref={descRef}
-            className="text-base md:text-lg text-muted-foreground mb-12 max-w-2xl mx-auto"
-          >
-            Exploring sound, rhythm, and storytelling through innovative musical
-            expression
-          </p>
-
-          <div
-            ref={buttonsRef}
-            className="flex flex-wrap gap-4 justify-center"
-          >
+          <div className="flex flex-wrap gap-4">
             <Button
               onClick={() => scrollToSection("music")}
               size="lg"
-              className="bg-primary text-primary-foreground hover:bg-primary/90 font-semibold transform hover:scale-105 transition-transform"
+              className="bg-primary text-primary-foreground hover:bg-primary/90 font-bold rounded-full px-8 py-6 text-base transform hover:scale-105 transition-all shadow-[0_0_40px_rgba(255,77,0,0.4)] hover:shadow-[0_0_60px_rgba(255,77,0,0.6)]"
             >
+              <Play className="w-5 h-5 mr-2" />
               Listen Now
             </Button>
             <Button
               onClick={() => scrollToSection("contact")}
               size="lg"
               variant="outline"
-              className="border-primary text-primary hover:bg-primary hover:text-primary-foreground font-semibold transform hover:scale-105 transition-transform"
+              className="border-2 border-foreground text-foreground hover:bg-foreground hover:text-background font-bold rounded-full px-8 py-6 text-base transform hover:scale-105 transition-all"
             >
               Get in Touch
             </Button>
@@ -136,11 +141,15 @@ const Hero = () => {
         </div>
       </div>
 
+      {/* Scroll indicator */}
       <button
         onClick={() => scrollToSection("videos")}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce"
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 group"
       >
-        <ArrowDown className="w-6 h-6 text-primary" />
+        <div className="flex flex-col items-center gap-2">
+          <span className="text-xs font-semibold tracking-widest text-muted-foreground uppercase">Scroll</span>
+          <ArrowDown className="w-5 h-5 text-primary animate-bounce" />
+        </div>
       </button>
     </section>
   );

@@ -8,8 +8,8 @@ const ShaderMaterial = () => {
   const uniforms = useMemo(
     () => ({
       u_time: { value: 0 },
-      u_colorA: { value: new THREE.Color('#00ff88') },
-      u_colorB: { value: new THREE.Color('#0088ff') },
+      u_colorA: { value: new THREE.Color('#ff4d00') },
+      u_colorB: { value: new THREE.Color('#000000') },
     }),
     []
   );
@@ -28,25 +28,39 @@ const ShaderMaterial = () => {
     uniform vec3 u_colorB;
     varying vec2 vUv;
 
+    // Noise function
+    float noise(vec2 st) {
+      return fract(sin(dot(st.xy, vec2(12.9898, 78.233))) * 43758.5453123);
+    }
+
     void main() {
       vec2 uv = vUv;
+      vec2 center = vec2(0.5, 0.5);
       
-      // Create flowing wave pattern
-      float wave1 = sin(uv.x * 5.0 + u_time * 0.3) * 0.5 + 0.5;
-      float wave2 = sin(uv.y * 8.0 - u_time * 0.2) * 0.5 + 0.5;
-      float wave3 = sin((uv.x + uv.y) * 4.0 + u_time * 0.4) * 0.5 + 0.5;
+      // Create radial gradient from center
+      float dist = distance(uv, center);
       
-      // Combine waves
-      float pattern = (wave1 + wave2 + wave3) / 3.0;
+      // Animated waves
+      float wave1 = sin(dist * 15.0 - u_time * 0.5) * 0.5 + 0.5;
+      float wave2 = sin(uv.x * 10.0 + u_time * 0.3) * 0.5 + 0.5;
+      float wave3 = cos(uv.y * 12.0 - u_time * 0.4) * 0.5 + 0.5;
       
-      // Create color gradient
+      // Create flowing pattern
+      float pattern = (wave1 + wave2 * wave3) * 0.5;
+      
+      // Add turbulence
+      float turbulence = noise(uv * 5.0 + u_time * 0.1) * 0.3;
+      pattern += turbulence;
+      
+      // Create dramatic gradient
       vec3 color = mix(u_colorA, u_colorB, pattern);
       
-      // Add some noise
-      float noise = fract(sin(dot(uv, vec2(12.9898, 78.233)) + u_time * 0.1) * 43758.5453);
-      color += noise * 0.03;
+      // Add vignette
+      float vignette = smoothstep(1.2, 0.3, dist);
+      color *= vignette;
       
-      gl_FragColor = vec4(color, 0.4);
+      // Reduce opacity for subtle effect
+      gl_FragColor = vec4(color, 0.25);
     }
   `;
 
