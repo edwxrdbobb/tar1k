@@ -24,13 +24,23 @@ const Navigation = () => {
 
   const navItems = [
     { label: "Home", id: "home" },
-    { label: "Music", id: "music" },
-    { label: "Videos", id: "videos" },
+    {
+      label: "Content",
+      subItems: [
+        { label: "Music", id: "music" },
+        { label: "Videos", id: "videos" },
+        { label: "Writings", id: "writings" },
+        { label: "Gallery", id: "gallery" },
+      ],
+    },
+    {
+      label: "Community",
+      subItems: [
+        { label: "Events", id: "events" },
+        { label: "Blog", id: "blog" },
+      ],
+    },
     { label: "About", id: "about" },
-    { label: "Writings", id: "writings" },
-    { label: "Community", id: "community" },
-    { label: "Events", id: "events" },
-    { label: "Gallery", id: "gallery" },
     { label: "Contact", id: "contact" },
   ];
 
@@ -50,15 +60,34 @@ const Navigation = () => {
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center gap-8">
-          {navItems.map((item) => (
-            <button
-              key={item.id}
-              onClick={() => scrollToSection(item.id)}
-              className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
-            >
-              {item.label}
-            </button>
-          ))}
+          {navItems.map((item) =>
+            item.subItems ? (
+              <div key={item.label} className="relative group">
+                <button className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors">
+                  {item.label}
+                </button>
+                <div className="absolute left-0 mt-2 w-40 bg-background border border-border rounded shadow-lg opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-opacity">
+                  {item.subItems.map((sub) => (
+                    <button
+                      key={sub.id}
+                      onClick={() => scrollToSection(sub.id)}
+                      className="block w-full text-left px-4 py-2 text-sm font-medium text-muted-foreground hover:text-primary hover:bg-muted transition-colors"
+                    >
+                      {sub.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <button
+                key={item.id}
+                onClick={() => scrollToSection(item.id)}
+                className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
+              >
+                {item.label}
+              </button>
+            )
+          )}
         </div>
 
         {/* Mobile Menu Button */}

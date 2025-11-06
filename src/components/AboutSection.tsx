@@ -1,12 +1,59 @@
+'use client';
+
+import { useEffect, useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
+
 const AboutSection = () => {
+  const sectionRef = useRef<HTMLElement>(null);
+  const imageRef = useRef<HTMLDivElement>(null);
+  const textRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Image entrance
+      gsap.from(imageRef.current, {
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 80%",
+          end: "top 40%",
+          scrub: true,
+        },
+        opacity: 0,
+        scale: 0.9,
+        rotationY: -20,
+      });
+
+      // Text entrance
+      gsap.from(textRef.current?.children, {
+        scrollTrigger: {
+          trigger: textRef.current,
+          start: "top 85%",
+          end: "top 50%",
+          scrub: true,
+        },
+        opacity: 0,
+        y: 30,
+        stagger: 0.1,
+      });
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <section id="about" className="py-20 bg-secondary/30">
+    <section id="about" ref={sectionRef} className="py-20 bg-secondary/30">
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-4xl md:text-5xl font-bold mb-12 text-center">About TAR1K</h2>
-          
+          <h2 className="text-4xl md:text-5xl font-bold mb-12 text-center">
+            About TAR1K
+          </h2>
+
           <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div className="space-y-6">
+            {/* Text Content */}
+            <div ref={textRef} className="space-y-6">
               <p className="text-lg text-muted-foreground leading-relaxed">
                 TAR1K is a musical artist dedicated to pushing the boundaries of contemporary sound. 
                 With a unique blend of rhythm, melody, and storytelling, each composition creates 
@@ -26,11 +73,22 @@ const AboutSection = () => {
               </p>
             </div>
 
-            <div className="relative">
-              <div className="aspect-square rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 border border-border flex items-center justify-center">
-                <div className="text-center">
-                  <div className="text-6xl font-bold text-primary mb-4">TAR1K</div>
-                  <p className="text-muted-foreground">Musical Artist</p>
+            {/* Image */}
+            <div ref={imageRef} className="relative transform-gpu">
+              <div className="aspect-square rounded-2xl overflow-hidden shadow-2xl border border-border">
+                <img
+                  src="/ta1.jpeg"
+                  alt="TAR1K - Musical Artist"
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                />
+              </div>
+
+              {/* Overlay Caption */}
+              <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 via-black/40 to-transparent">
+                <div className="text-white">
+                  <div className="text-5xl md:text-6xl font-bold mb-1">TAR1K</div>
+                  <p className="text-white/80 text-lg">Musical Artist</p>
                 </div>
               </div>
             </div>

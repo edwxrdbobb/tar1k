@@ -1,6 +1,9 @@
+'use client';
+
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ExternalLink, Headphones } from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -11,7 +14,7 @@ const MusicSection = () => {
   useEffect(() => {
     const ctx = gsap.context(() => {
       const cards = cardsRef.current?.querySelectorAll(".music-card");
-      
+
       cards?.forEach((card, index) => {
         gsap.from(card, {
           scrollTrigger: {
@@ -25,7 +28,6 @@ const MusicSection = () => {
           rotationY: index % 2 === 0 ? -15 : 15,
         });
 
-        // Hover effect
         const cardElement = card as HTMLElement;
         cardElement.addEventListener("mouseenter", () => {
           gsap.to(card, {
@@ -51,49 +53,84 @@ const MusicSection = () => {
   }, []);
 
   return (
-    <section id="music" ref={sectionRef} className="py-20">
+    <section id="music" ref={sectionRef} className="py-20 bg-secondary/10">
       <div className="container mx-auto px-4">
         <div className="max-w-5xl mx-auto">
-          <h2 className="text-4xl md:text-5xl font-bold mb-4 text-center">
-            Music
-          </h2>
-          <p className="text-muted-foreground text-center mb-12">
-            Stream and listen to the latest releases
-          </p>
+          <div className="text-center mb-12">
+            <h2 className="text-4xl md:text-5xl font-bold mb-4">
+              Music
+            </h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Stream tar1k’s latest releases and explore the afro-fusion sound from Sierra Leone.
+            </p>
+          </div>
 
-          <div ref={cardsRef} className="grid md:grid-cols-2 gap-8" style={{ perspective: "1000px" }}>
+          <div
+            ref={cardsRef}
+            className="grid md:grid-cols-2 gap-8"
+            style={{ perspective: "1000px" }}
+          >
+            {/* Spotify Card */}
             <div className="music-card space-y-4 transform-gpu">
-              <h3 className="text-xl font-semibold">Spotify</h3>
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 bg-[#1DB954] rounded-full flex items-center justify-center">
+                  <Headphones className="w-5 h-5 text-white" />
+                </div>
+                <h3 className="text-xl font-semibold">Spotify</h3>
+              </div>
               <div className="rounded-xl overflow-hidden border border-border shadow-lg hover:shadow-primary/20 transition-shadow">
                 <iframe
                   style={{ borderRadius: "12px" }}
-                  src="https://open.spotify.com/embed/artist/0TnOYISbd1XYRBk9myaseg?utm_source=generator"
+                  src="https://open.spotify.com/embed/artist/6RhNko3SJyefSi7mO1fMi5?utm_source=generator&theme=0"
                   width="100%"
-                  height="380"
+                  height="352"
                   frameBorder="0"
                   allowFullScreen
                   allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
                   loading="lazy"
+                  title="tar1k on Spotify"
                 />
               </div>
+              <p className="text-sm text-muted-foreground">
+                <span className="font-medium">47</span> monthly listeners • Popular: Work, Feel Am, Patch Am
+              </p>
             </div>
 
+            {/* Audiomack Card */}
             <div className="music-card space-y-4 transform-gpu">
-              <h3 className="text-xl font-semibold">Audiomack</h3>
-              <div className="rounded-xl overflow-hidden border border-border bg-card p-6 shadow-lg hover:shadow-primary/20 transition-shadow h-[380px] flex flex-col justify-center">
-                <p className="text-muted-foreground mb-4">
-                  Listen on Audiomack for exclusive tracks and releases
-                </p>
-                <a
-                  href="https://audiomack.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-block bg-primary text-primary-foreground px-6 py-3 rounded-lg font-semibold hover:bg-primary/90 transition-all transform hover:scale-105"
-                >
-                  Listen on Audiomack
-                </a>
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center">
+                  <Headphones className="w-5 h-5 text-white" />
+                </div>
+                <h3 className="text-xl font-semibold">Audiomack</h3>
               </div>
+              <div className="rounded-xl overflow-hidden border border-border bg-card p-6 shadow-lg hover:shadow-primary/20 transition-shadow h-[352px] flex flex-col justify-center">
+                <div className="space-y-4">
+                  <p className="text-muted-foreground">
+                    Exclusive freestyles, early drops, and behind-the-scenes audio.
+                  </p>
+                  <a
+                    href="https://audiomack.com/onlytar1k"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-lg font-semibold transition-all transform hover:scale-105"
+                  >
+                    Listen on Audiomack
+                    <ExternalLink className="w-4 h-4" />
+                  </a>
+                </div>
+              </div>
+              <p className="text-sm text-muted-foreground">
+                Follow for new releases and live sessions
+              </p>
             </div>
+          </div>
+
+          {/* Optional: Small footer note */}
+          <div className="mt-12 text-center">
+            <p className="text-sm text-muted-foreground">
+              More platforms coming soon: Apple Music, YouTube Music, Boomplay
+            </p>
           </div>
         </div>
       </div>
