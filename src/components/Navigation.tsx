@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Menu, X, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -9,6 +9,7 @@ const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -18,35 +19,48 @@ const Navigation = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const scrollToSection = (id: string) => {
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-      setIsOpen(false);
-      setOpenDropdown(null);
-    }
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setOpenDropdown(null);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
+    setIsOpen(false);
+    setOpenDropdown(null);
+    window.location.href = href;
+  };
+
+  const toggleDropdown = (label: string) => {
+    setOpenDropdown(openDropdown === label ? null : label);
   };
 
   const navItems = [
-    { label: "Home", id: "home" },
+    { label: "Home", href: "/" },
     {
       label: "Content",
       subItems: [
-        { label: "Music", id: "music" },
-        { label: "Videos", id: "videos" },
-        { label: "Writings", id: "writings" },
-        { label: "Gallery", id: "gallery" },
+        { label: "Music", href: "/music" },
+        { label: "Videos", href: "/videos" },
+        { label: "Writing", href: "/writing" },
+        { label: "Gallery", href: "/gallery" },
       ],
     },
     {
       label: "Community",
       subItems: [
-        { label: "Events", id: "events" },
-        { label: "Blog", id: "blog" },
+        { label: "Events", href: "/events" },
+        { label: "Blog", href: "/blog" },
       ],
     },
-    { label: "About", id: "about" },
-    { label: "Contact", id: "contact" },
+    { label: "About", href: "/about" },
+    { label: "Contact", href: "/contact" },
   ];
 
   return (
@@ -60,24 +74,23 @@ const Navigation = () => {
     >
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
         {/* Logo */}
-        <button
-          onClick={() => scrollToSection("home")}
+        <a
+          href="/"
+          onClick={(e) => handleNavClick(e, "/")}
           className="text-2xl font-bold tracking-tighter hover:text-primary transition-colors"
         >
           TAR1K
-        </button>
+        </a>
 
         {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center gap-8">
+        <div className="hidden md:flex items-center gap-8" ref={dropdownRef}>
           {navItems.map((item) =>
             item.subItems ? (
-              <div
-                key={item.label}
-                className="relative"
-                onMouseEnter={() => setOpenDropdown(item.label)}
-                onMouseLeave={() => setOpenDropdown(null)}
-              >
-                <button className="flex items-center gap-1 text-sm font-medium text-muted-foreground hover:text-primary transition-colors">
+              <div key={item.label} className="relative">
+                <button
+                  onClick={() => toggleDropdown(item.label)}
+                  className="flex items-center gap-1 text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
+                >
                   {item.label}
                   <ChevronDown
                     className={cn(
@@ -99,25 +112,27 @@ const Navigation = () => {
                 >
                   <div className="py-2">
                     {item.subItems.map((sub) => (
-                      <button
-                        key={sub.id}
-                        onClick={() => scrollToSection(sub.id)}
+                      <a
+                        key={sub.href}
+                        href={sub.href}
+                        onClick={(e) => handleNavClick(e, sub.href)}
                         className="block w-full text-left px-4 py-2.5 text-sm font-medium text-muted-foreground hover:text-primary hover:bg-muted/50 transition-all"
                       >
                         {sub.label}
-                      </button>
+                      </a>
                     ))}
                   </div>
                 </div>
               </div>
             ) : (
-              <button
-                key={item.id}
-                onClick={() => scrollToSection(item.id)}
+              <a
+                key={item.href}
+                href={item.href}
+                onClick={(e) => handleNavClick(e, item.href)}
                 className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
               >
                 {item.label}
-              </button>
+              </a>
             )
           )}
         </div>
@@ -142,7 +157,7 @@ const Navigation = () => {
                 {item.subItems ? (
                   <div>
                     <button
-                      onClick={() => setOpenDropdown(openDropdown === item.label ? null : item.label)}
+                      onClick={() => toggleDropdown(item.label)}
                       className="w-full flex items-center justify-between text-sm font-medium text-muted-foreground py-2"
                     >
                       {item.label}
@@ -156,24 +171,26 @@ const Navigation = () => {
                     {openDropdown === item.label && (
                       <div className="ml-4 mt-2 space-y-1 border-l-2 border-border/30 pl-4">
                         {item.subItems.map((sub) => (
-                          <button
-                            key={sub.id}
-                            onClick={() => scrollToSection(sub.id)}
+                          <a
+                            key={sub.href}
+                            href={sub.href}
+                            onClick={(e) => handleNavClick(e, sub.href)}
                             className="block w-full text-left text-sm text-muted-foreground hover:text-primary py-1.5 transition-colors"
                           >
                             {sub.label}
-                          </button>
+                          </a>
                         ))}
                       </div>
                     )}
                   </div>
                 ) : (
-                  <button
-                    onClick={() => scrollToSection(item.id)}
+                  <a
+                    href={item.href}
+                    onClick={(e) => handleNavClick(e, item.href)}
                     className="block w-full text-left text-sm font-medium text-muted-foreground hover:text-primary py-2 transition-colors"
                   >
                     {item.label}
-                  </button>
+                  </a>
                 )}
               </div>
             ))}

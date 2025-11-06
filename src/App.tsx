@@ -12,6 +12,9 @@ import Gallery from "./pages/Gallery";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Blog from "./pages/Blog";
+import Writing from "./pages/Writing";
+import RSVPPage from "./pages/RSVP";
+import Music from "./pages/Music";
 
 const queryClient = new QueryClient();
 
@@ -25,11 +28,15 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/events" element={<Events />} />
-          <Route path="/video" element={<Video />} />
+          <Route path="/videos" element={<Video />} />
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/writing" element={<Writing />} />
+          <Route path="/rsvp" element={<RSVPPage />} />
           <Route path="/blog" element={<Blog />} />
+          <Route path="/music" element={<Music />} />
+
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

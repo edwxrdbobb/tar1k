@@ -56,29 +56,29 @@ const EventsSection = () => {
 
   const events = [
     {
-      date: "Dec 15, 2025",
+      date: "Nov 21, 2025",
       time: "8:00 PM",
-      title: "Live Performance - Winter Series",
-      venue: "The Grand Theater",
-      location: "New York, NY",
+      title: "Live Performance ",
+      venue: "The Blank Space",
+      location: "Freetown, SL",
       thumbnail: "https://images.unsplash.com/photo-1540039156060-76da999c6a0c?w=800&h=600&fit=crop",
     },
-    {
-      date: "Jan 20, 2026",
-      time: "7:30 PM",
-      title: "Intimate Acoustic Session",
-      venue: "Blue Note Jazz Club",
-      location: "Los Angeles, CA",
-      thumbnail: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=800&h=600&fit=crop",
-    },
-    {
-      date: "Feb 14, 2026",
-      time: "9:00 PM",
-      title: "Valentine's Special Concert",
-      venue: "Symphony Hall",
-      location: "Chicago, IL",
-      thumbnail: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&h=600&fit=crop",
-    },
+    // {
+    //   date: "Jan 20, 2026",
+    //   time: "7:30 PM",
+    //   title: "Intimate Acoustic Session",
+    //   venue: "Blue Note Jazz Club",
+    //   location: "Los Angeles, CA",
+    //   thumbnail: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=800&h=600&fit=crop",
+    // },
+    // {
+    //   date: "Feb 14, 2026",
+    //   time: "9:00 PM",
+    //   title: "Valentine's Special Concert",
+    //   venue: "Symphony Hall",
+    //   location: "Chicago, IL",
+    //   thumbnail: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&h=600&fit=crop",
+    // },
   ];
 
   return (

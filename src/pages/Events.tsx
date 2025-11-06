@@ -1,6 +1,8 @@
+import EventsSection from "@/components/EventsSection";
+
 const Events = () => (
-  <div className="min-h-screen flex items-center justify-center">
-    <h1 className="text-4xl font-bold">Events Page</h1>
-  </div>
+  <>
+    <EventsSection />
+  </>
 );
 export default Events;

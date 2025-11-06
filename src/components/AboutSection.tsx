@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { GridBackground } from "./ui/spotlight-new";
+import { Component } from "./ui/ethernal-shadow";
 
 
 gsap.registerPlugin(ScrollTrigger);
@@ -46,8 +47,15 @@ const AboutSection = () => {
   }, []);
 
   return (
-    <section id="about" ref={sectionRef} className="bg-secondary/30">
-      <GridBackground />
+    <>
+    <Component
+      color="rgba(128, 128, 128, 1)"
+        animation={{ scale: 100, speed: 90 }}
+        noise={{ opacity: 1, scale: 1.2 }}
+        sizing="fill"
+         >
+    <section id="about" ref={sectionRef} className="bg-secondary/10 py-20">
+
       <div className="container mx-auto px-4 py-20">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-4xl md:text-5xl font-bold mb-12 text-center">
@@ -100,6 +108,8 @@ const AboutSection = () => {
       </div>
  
     </section>
+    </Component>
+    </>
   );
 };
 
