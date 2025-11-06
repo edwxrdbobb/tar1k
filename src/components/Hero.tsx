@@ -85,7 +85,7 @@ const Hero = () => {
       className="min-h-screen flex items-end relative overflow-hidden pb-32"
     >
       {/* SpotlightNew Component - Multiple instances for left/right effect */}
-      <SpotlightNew
+      {/* <SpotlightNew
         className="absolute inset-0 -z-10" // Full coverage for subtle background glow
         gradientFirst="radial-gradient(68.54% 68.72% at 55.02% 31.46%, hsla(210, 100%, 85%, .08) 0, hsla(210, 100%, 55%, .02) 50%, hsla(210, 100%, 45%, 0) 80%)"
         gradientSecond="radial-gradient(50% 50% at 50% 50%, hsla(210, 100%, 85%, .06) 0, hsla(210, 100%, 55%, .02) 80%, transparent 100%)"
@@ -96,7 +96,7 @@ const Hero = () => {
         smallWidth={240}
         duration={7}
         xOffset={100}
-      />
+      /> */}
 
       {/* Left Spotlight */}
       <SpotlightNew
