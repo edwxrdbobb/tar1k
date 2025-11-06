@@ -6,7 +6,7 @@ import { ArrowDown, Play } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { TextHoverEffect } from "@/components/ui/text-hover-effect";
-import { Spotlight as SpotlightNew } from "@/components/ui/spotlight-new"; // Updated import for the new component
+import { Spotlight } from "@/components/ui/spotlight-new";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -84,45 +84,8 @@ const Hero = () => {
       ref={heroRef}
       className="min-h-screen flex items-end relative overflow-hidden pb-32"
     >
-      {/* SpotlightNew Component - Multiple instances for left/right effect */}
-      {/* <SpotlightNew
-        className="absolute inset-0 -z-10" // Full coverage for subtle background glow
-        gradientFirst="radial-gradient(68.54% 68.72% at 55.02% 31.46%, hsla(210, 100%, 85%, .08) 0, hsla(210, 100%, 55%, .02) 50%, hsla(210, 100%, 45%, 0) 80%)"
-        gradientSecond="radial-gradient(50% 50% at 50% 50%, hsla(210, 100%, 85%, .06) 0, hsla(210, 100%, 55%, .02) 80%, transparent 100%)"
-        gradientThird="radial-gradient(50% 50% at 50% 50%, hsla(210, 100%, 85%, .04) 0, hsla(210, 100%, 45%, .02) 80%, transparent 100%)"
-        translateY={-350}
-        width={560}
-        height={1380}
-        smallWidth={240}
-        duration={7}
-        xOffset={100}
-      /> */}
-
-      {/* Left Spotlight */}
-      <SpotlightNew
-        className="absolute -top-40 left-0 w-[300px] h-[600px] -z-10"
-        fill="white"
-        gradientFirst="radial-gradient(100% 100% at -10% -10%, hsla(0, 0%, 100%, .3) 0%, transparent 50%)"
-        translateY={-200}
-        width={300}
-        height={600}
-        smallWidth={150}
-        duration={10}
-        xOffset={-50}
-      />
-
-      {/* Right Spotlight */}
-      <SpotlightNew
-        className="absolute -top-20 right-0 w-[300px] h-[600px] -z-10"
-        fill="white"
-        gradientFirst="radial-gradient(100% 100% at 110% 110%, hsla(0, 0%, 100%, .3) 0%, transparent 50%)"
-        translateY={-150}
-        width={300}
-        height={600}
-        smallWidth={150}
-        duration={12}
-        xOffset={50}
-      />
+      {/* Spotlight background */}
+      <Spotlight />
 
       <img
         src="/ta07.webp"

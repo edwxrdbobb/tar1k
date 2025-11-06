@@ -3,6 +3,8 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { GridBackground } from "./ui/spotlight-new";
+
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -44,8 +46,9 @@ const AboutSection = () => {
   }, []);
 
   return (
-    <section id="about" ref={sectionRef} className="py-20 bg-secondary/30">
-      <div className="container mx-auto px-4">
+    <section id="about" ref={sectionRef} className="bg-secondary/30">
+      <GridBackground />
+      <div className="container mx-auto px-4 py-20">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-4xl md:text-5xl font-bold mb-12 text-center">
             About TAR1K
@@ -95,6 +98,7 @@ const AboutSection = () => {
           </div>
         </div>
       </div>
+ 
     </section>
   );
 };

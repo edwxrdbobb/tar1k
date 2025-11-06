@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ExternalLink, Headphones } from "lucide-react";
+import { BackgroundCells } from "./ui/background-ripple-effect";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -53,7 +54,8 @@ const MusicSection = () => {
   }, []);
 
   return (
-    <section id="music" ref={sectionRef} className="py-20 bg-secondary/10">
+    <section id="music" ref={sectionRef} className="py-20 ">
+      <BackgroundCells className="bg-secondary/10" >
       <div className="container mx-auto px-4">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-12">
@@ -134,6 +136,7 @@ const MusicSection = () => {
           </div>
         </div>
       </div>
+      </BackgroundCells>
     </section>
   );
 };

@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Play, ChevronLeft, ChevronRight } from "lucide-react";
+import { BeamsBackground } from "@/components/ui/beam-background"
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -117,9 +118,10 @@ const VideoSection = () => {
     <section
       id="videos"
       ref={sectionRef}
-      className="py-20 bg-secondary/30 relative"
+      className=" bg-secondary/30 relative"
     >
-      <div className="container mx-auto px-4">
+      <BeamsBackground intensity="subtle" >
+      <div className="container mx-auto px-4 py-20">
         <div className="max-w-4xl mx-auto">
           {/* ---------- Title ---------- */}
           <h2
@@ -206,6 +208,7 @@ const VideoSection = () => {
           </div>
         </div>
       </div>
+      </BeamsBackground>
     </section>
   );
 };

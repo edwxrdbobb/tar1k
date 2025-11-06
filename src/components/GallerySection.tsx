@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { X, ArrowRight } from "lucide-react";
+import { BeamsBackground } from "@/components/ui/beam-background"
 // import Link from "next/link";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -69,6 +70,7 @@ const GallerySection = () => {
 
   return (
     <>
+    <BeamsBackground intensity="subtle">
       <section id="gallery" ref={sectionRef} className="py-20 bg-secondary/30">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
@@ -137,6 +139,7 @@ const GallerySection = () => {
           </div>
         </div>
       )}
+      </BeamsBackground>
     </>
   );
 };

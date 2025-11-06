@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Calendar, MapPin, Clock, ArrowRight } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { Spotlight, GridBackground } from "@/components/ui/spotlight-new";
+
 // import Link from "next/link";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -81,6 +83,9 @@ const EventsSection = () => {
 
   return (
     <section id="events" ref={sectionRef} className="py-20 bg-secondary/5">
+
+      <GridBackground />
+      <Spotlight />
       <div className="container mx-auto px-4">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-12">

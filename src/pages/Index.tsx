@@ -8,8 +8,6 @@ import GallerySection from "@/components/GallerySection";
 import NewsletterSection from "@/components/NewsletterSection";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
-import ShaderBackground from "@/components/ShaderBackground";
-import ParticleField from "@/components/ParticleField";
 import { useSmoothScroll } from "@/hooks/useSmoothScroll";
 import gsap from "gsap";
 
@@ -54,16 +52,13 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
-      <ShaderBackground />
-      <ParticleField />
-      {/* <Navigation /> REMOVE THIS LINE */}
       <Hero />
       <VideoSection />
       <AboutSection />
       <MusicSection />
       <EventsSection />
       <GallerySection />
-      <NewsletterSection />
+      {/* <NewsletterSection /> */}
       <ContactSection />
       <Footer />
     </div>
