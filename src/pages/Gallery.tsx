@@ -19,21 +19,58 @@ const GalleryPage = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
-  // Generate 50 images from public/ta1.jpeg to ta50.jpeg
-  const allImages: GalleryImage[] = useMemo(() => {
-    const images: GalleryImage[] = [];
-    const categories: GalleryImage["category"][] = ["live", "studio", "backstage", "promo", "portrait"];
-    
-    for (let i = 1; i <= 50; i++) {
-      images.push({
-        id: i,
-        src: `/ta${i}.jpeg`,
-        alt: `Gallery image ${i}`,
-        category: categories[i % categories.length],
-      });
-    }
-    return images;
-  }, []);
+  const baseImages = useMemo<GalleryImage[]>(() => [
+    { id: 1, src: "/ta1.jpeg", alt: "Studio reflections", category: "studio" },
+    { id: 2, src: "/ta2.jpeg", alt: "Lake session still", category: "promo" },
+    { id: 3, src: "/ta3.jpeg", alt: "Alima single art", category: "promo" },
+    { id: 4, src: "/ta4.jpeg", alt: "Feel Am collage", category: "promo" },
+    { id: 5, src: "/ta5.jpeg", alt: "Patch Am freestyle cover", category: "promo" },
+    { id: 6, src: "/ta6.jpeg", alt: "Festival appearance", category: "live" },
+    { id: 7, src: "/ta7.webp", alt: "Hero background capture", category: "portrait" },
+    { id: 8, src: "/ta8.webp", alt: "Nothing Too Serious banner", category: "promo" },
+  ], []);
+
+  const driveImages = useMemo<GalleryImage[]>(() => {
+    const entries = [
+      { url: "https://drive.google.com/file/d/1UFJ3_SEpL59Lo07a0JvpkN5z_6mSE7/view?usp=sharing", event: "Alima Show" },
+      { url: "https://drive.google.com/file/d/1lVbEGYnuQBb3AelCZwNLoADB2idULEM/view?usp=sharing", event: "Alima Show" },
+      { url: "https://drive.google.com/file/d/1LOFP9GX2Rf2YaqneAo1TeHR-okb7Lnxs/view?usp=sharing", event: "Alima Show" },
+      { url: "https://drive.google.com/file/d/1MZTIeAIedL6ndX9zbAjRl4-y768cQmrS/view?usp=drive_link", event: "Alima Show" },
+      { url: "https://drive.google.com/file/d/1MZTIeAIedL6ndX9zbAjRl4-y768cQmrS/view?usp=drive_link", event: "Alima Show" },
+      { url: "https://drive.google.com/file/d/1MZTIeAIedL6ndX9zbAjRl4-y768cQmrS/view?usp=drive_link", event: "Alima Show" },
+      { url: "https://drive.google.com/file/d/1MZTIeAIedL6ndX9zbAjRl4-y768cQmrS/view?usp=drive_link", event: "Alima Show" },
+      { url: "https://drive.google.com/file/d/1MZTIeAIedL6ndX9zbAjRl4-y768cQmrS/view?usp=drive_link", event: "Alima Show" },
+      { url: "https://drive.google.com/file/d/1MZTIeAIedL6ndX9zbAjRl4-y768cQmrS/view?usp=drive_link", event: "Alima Show" },
+      { url: "https://drive.google.com/file/d/1MZTIeAIedL6ndX9zbAjRl4-y768cQmrS/view?usp=drive_link", event: "Alima Show" },
+      { url: "https://drive.google.com/file/d/1MZTIeAIedL6ndX9zbAjRl4-y768cQmrS/view?usp=drive_link", event: "Alima Show" },
+      { url: "https://drive.google.com/file/d/1MZTIeAIedL6ndX9zbAjRl4-y768cQmrS/view?usp=drive_link", event: "Alima Show" },
+      { url: "https://drive.google.com/file/d/1MZTIeAIedL6ndX9zbAjRl4-y768cQmrS/view?usp=drive_link", event: "Alima Show" },
+      { url: "https://drive.google.com/file/d/1MZTIeAIedL6ndX9zbAjRl4-y768cQmrS/view?usp=drive_link", event: "Alima Show" },
+      { url: "https://drive.google.com/file/d/1MZTIeAIedL6ndX9zbAjRl4-y768cQmrS/view?usp=drive_link", event: "Alima Show" },
+      { url: "https://drive.google.com/file/d/1MZTIeAIedL6ndX9zbAjRl4-y768cQmrS/view?usp=drive_link", event: "Alima Show" },
+      { url: "https://drive.google.com/file/d/1MZTIeAIedL6ndX9zbAjRl4-y768cQmrS/view?usp=drive_link", event: "Alima Show" },
+      { url: "https://drive.google.com/file/d/1MZTIeAIedL6ndX9zbAjRl4-y768cQmrS/view?usp=drive_link", event: "Alima Show" },
+    ];
+
+    return entries.map((image, index) => {
+      const idMatch = image.url.match(/\/d\/([^/]+)\//);
+      const driveId = idMatch?.[1] || "";
+      const src = driveId
+        ? `https://drive.google.com/uc?export=view&id=${driveId}`
+        : image.url;
+
+      return {
+        id: baseImages.length + index + 1,
+        src,
+        alt: `${image.event} ${index + 1}`,
+        category: "live" as const,
+      };
+    });
+  }, [baseImages.length]);
+
+  const allImages = useMemo<GalleryImage[]>(() => {
+    return [...baseImages, ...driveImages];
+  }, [baseImages, driveImages]);
 
   // Filter images
   const filteredImages = useMemo(() => {

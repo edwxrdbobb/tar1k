@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ExternalLink, Headphones } from "lucide-react";
+import { Headphones } from "lucide-react";
 import { BackgroundCells } from "./ui/background-ripple-effect";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -52,6 +52,67 @@ const MusicSection = () => {
 
     return () => ctx.revert();
   }, []);
+
+  const discography = [
+    {
+      title: "Work",
+      type: "Single",
+      releaseDate: "October, 2022",
+      cover: "/ta1.jpeg",
+      credits: [
+        "Written & Performed by tar1k & Dito Freaky",
+        "Produced by Joshhbeatz",
+        "Mixed & Mastered by Joshhbeatz",
+      ],
+    },
+    {
+      title: "Luv 2 Luv U (ft Dito Freaky)",
+      type: "Single",
+      releaseDate: "February, 2023",
+      cover: "/ta2.jpeg",
+      credits: [
+        "Written & Performed by tar1k & Dito Freaky",
+        "Produced by Josh Nack",
+        "Additional Production by Banfy",
+        "Mixed & Mastered by Banfy",
+      ],
+    },
+    {
+      title: "Alima",
+      type: "Single",
+      releaseDate: "June, 2024",
+      cover: "/ta3.jpeg",
+      credits: [
+        "Written & Performed by tar1k",
+        "Produced by Joshhbeatz",
+        "Additional Production by Banfy",
+        "Mixed & Mastered by Banfy",
+      ],
+    },
+    {
+      title: "Feel Am",
+      type: "Single",
+      releaseDate: "December, 2024",
+      cover: "/ta4.jpeg",
+      credits: [
+        "Written & Performed by tar1k",
+        "Produced by Joshhbeatz",
+        "Mixed & Mastered by Joshhbeatz",
+      ],
+    },
+    {
+      title: "Patch Am (Freestyle)",
+      type: "Single",
+      releaseDate: "April, 2025",
+      cover: "/ta5.jpeg",
+      credits: [
+        "Written & Performed by tar1k",
+        "Produced by Josh Nack",
+        "Backing Vocals by Adeola",
+        "Mixed & Mastered by Medsul",
+      ],
+    },
+  ];
 
   return (
     <section id="music" ref={sectionRef} className="py-20 ">
@@ -149,10 +210,8 @@ const MusicSection = () => {
           </div>
 
           {/* Optional: Small footer note */}
-          <div className="mt-12 text-center">
-            <p className="text-sm text-muted-foreground">
-              More platforms coming soon: Apple Music, YouTube Music, Boomplay
-            </p>
+          <div className="mt-12 text-center text-sm text-muted-foreground">
+            More platforms coming soon: Apple Music, YouTube Music, Boomplay
           </div>
         </div>
           </div>
@@ -161,25 +220,54 @@ const MusicSection = () => {
           <div className="mt-20 max-w-5xl mx-auto">
             <div className="text-center mb-8">
               <h3 className="text-3xl md:text-4xl font-bold mb-2">Discography</h3>
-              <p className="text-muted-foreground">A selection from the press kit</p>
+              <p className="text-muted-foreground">Key releases with credits straight from the press kit</p>
             </div>
 
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              <div className="rounded-xl border border-border p-5 hover:bg-secondary/20 transition-colors">
-                <div className="text-sm text-muted-foreground mb-1">Single</div>
-                <div className="text-xl font-semibold">Alima</div>
-              </div>
-              <div className="rounded-xl border border-border p-5 hover:bg-secondary/20 transition-colors">
-                <div className="text-sm text-muted-foreground mb-1">Single</div>
-                <div className="text-xl font-semibold">Feel Am</div>
-              </div>
-              <div className="rounded-xl border border-border p-5 hover:bg-secondary/20 transition-colors">
-                <div className="text-sm text-muted-foreground mb-1">Freestyle</div>
-                <div className="text-xl font-semibold">Patch Am (freestyle)</div>
-              </div>
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {discography.map((release) => (
+                <article
+                  key={release.title}
+                  className="rounded-2xl border border-border bg-secondary/20 shadow-lg transition hover:-translate-y-1 hover:shadow-primary/20"
+                >
+                  <div className="aspect-square overflow-hidden rounded-t-2xl border-b border-border/40 bg-gradient-to-br from-muted to-background">
+                    {release.cover ? (
+                      <img
+                        src={release.cover}
+                        alt={`${release.title} artwork`}
+                        className="h-full w-full object-cover"
+                        loading="lazy"
+                      />
+                    ) : (
+                      <div className="flex h-full w-full items-center justify-center text-4xl font-black tracking-tight">
+                        {release.title.charAt(0)}
+                      </div>
+                    )}
+                  </div>
+                  <div className="space-y-4 p-5">
+                    <div>
+                      <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
+                        {release.type}
+                      </p>
+                      <h4 className="text-xl font-semibold leading-tight">{release.title}</h4>
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-primary">Release Date</p>
+                      <p className="text-sm text-muted-foreground">{release.releaseDate}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold mb-1">Credits</p>
+                      <ul className="list-disc space-y-1 pl-4 text-sm text-muted-foreground">
+                        {release.credits.map((credit) => (
+                          <li key={credit}>{credit}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </article>
+              ))}
             </div>
 
-            <div className="text-center mt-8">
+            <div className="text-center mt-10">
               <a href={encodeURI('/tar1k august updated press kit.pdf')} target="_blank" rel="noreferrer" className="inline-block text-sm text-primary hover:underline">
                 View full discography in the Press Kit
               </a>
