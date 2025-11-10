@@ -54,6 +54,44 @@ const ContactSection = () => {
     setIsLoading(false);
   };
 
+  const handleSubmitResend = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!formData.name || !formData.email || !formData.message) {
+      toast({
+        title: "All fields required",
+        description: "Please fill in all fields",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data?.success) throw new Error(data?.error || 'Failed');
+
+      toast({
+        title: "Message sent",
+        description: "Thanks! I’ll get back to you soon.",
+      });
+      setFormData({ name: "", email: "", message: "" });
+    } catch (err) {
+      toast({
+        title: "Something went wrong",
+        description: "Please try again in a moment.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const socialLinks = [
     { icon: Instagram, href: "https://www.instagram.com/onlytar1k/", label: "Instagram" },
     { icon: X, href: "https://x.com/onlytar1k", label: "X" },
@@ -76,7 +114,7 @@ const ContactSection = () => {
             {/* Form */}
             <div>
               <h3 className="text-2xl font-semibold mb-6">Send a Message</h3>
-              <form onSubmit={handleSubmit} className="space-y-4">
+              <form onSubmit={handleSubmitResend} className="space-y-4">
                 <Input
                   placeholder="Your Name"
                   value={formData.name}

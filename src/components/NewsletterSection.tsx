@@ -20,18 +20,30 @@ const NewsletterSection = () => {
       return;
     }
 
-    setIsLoading(true);
+    try {
+      setIsLoading(true);
+      const res = await fetch('/api/newsletter', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data?.success) throw new Error(data?.error || 'Failed');
 
-    // Mailchimp integration would go here
-    // For now, we'll simulate the submission
-    setTimeout(() => {
       toast({
-        title: "Success!",
-        description: "You've been subscribed to the newsletter",
+        title: "Subscribed!",
+        description: "You’ve been added to the newsletter.",
       });
       setEmail("");
+    } catch (err) {
+      toast({
+        title: "Subscription failed",
+        description: "Please try again shortly.",
+        variant: "destructive",
+      });
+    } finally {
       setIsLoading(false);
-    }, 1000);
+    }
   };
 
   return (

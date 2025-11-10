@@ -17,7 +17,7 @@ const MusicSection = () => {
       const cards = cardsRef.current?.querySelectorAll(".music-card");
 
       cards?.forEach((card, index) => {
-        gsap.from(card, {
+        gsap.from(card, { 
           scrollTrigger: {
             trigger: card,
             start: "top 80%",
@@ -59,7 +59,7 @@ const MusicSection = () => {
       <div className="container mx-auto px-4">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-bold mb-4">
+            <h2 className="text-4xl md:text-5xl font-bold mb-4 font-borel">
               Music
             </h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">

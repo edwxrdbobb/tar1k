@@ -74,13 +74,13 @@ const Navigation = () => {
     >
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
         {/* Logo */}
-        <a
-          href="/"
-          onClick={(e) => handleNavClick(e, "/")}
-          className="text-2xl font-bold tracking-tighter hover:text-primary transition-colors"
-        >
-          TAR1K
-        </a>
+            <a
+              href="/"
+              onClick={(e) => handleNavClick(e, "/")}
+              className="text-2xl font-bold tracking-tighter hover:text-primary transition-colors font-borel"
+            >
+              Tar1k
+            </a>
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center gap-8" ref={dropdownRef}>
