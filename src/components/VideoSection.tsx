@@ -128,9 +128,9 @@ const VideoSection = () => {
             ref={titleRef}
             className="text-4xl md:text-5xl font-bold mb-4 text-center"
           >
-            Featured Tracks
+            Featured <span className="font-borel">Tracks</span>
           </h2>
-          <p className="text-muted-foreground text-center mb-12">
+          <p className="text-muted-foreground text-center mb-12 font-borel">
             Listen to the latest from tar1k
           </p>
 

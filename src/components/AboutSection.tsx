@@ -9,7 +9,7 @@ import { Component } from "./ui/ethernal-shadow";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const AboutSection = () => {
+const AboutSection = () => { 
   const sectionRef = useRef<HTMLElement>(null);
   const imageRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLDivElement>(null);
@@ -58,29 +58,30 @@ const AboutSection = () => {
 
       <div className="container mx-auto px-4 py-20">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-4xl md:text-5xl font-bold mb-12 text-center">
-            About TAR1K
-          </h2>
+              <h2 className="text-4xl md:text-5xl font-bold mb-12 text-center">
+                About <span className="font-borel">Tar1k</span>
+              </h2>
 
           <div className="grid md:grid-cols-2 gap-12 items-center">
             {/* Text Content */}
             <div ref={textRef} className="space-y-6">
               <p className="text-lg text-muted-foreground leading-relaxed">
-                TAR1K is a musical artist dedicated to pushing the boundaries of contemporary sound. 
-                With a unique blend of rhythm, melody, and storytelling, each composition creates 
-                an immersive experience that resonates with listeners across the globe.
-              </p>
-              
-              <p className="text-lg text-muted-foreground leading-relaxed">
-                Drawing inspiration from diverse musical traditions and modern production techniques, 
-                TAR1K crafts sonic landscapes that are both innovative and deeply personal. The music 
-                explores themes of identity, connection, and the human experience.
+                tar1k is an outlier. A multifaceted singer, poet and songwriter from Sierra Leone weaving
+                together afro-fusion, rap, soul and Caribbean influences into a distinct sound that is as raw
+                as it is refined.
               </p>
 
               <p className="text-lg text-muted-foreground leading-relaxed">
-                With performances spanning intimate venues to major stages, TAR1K continues to evolve 
-                as an artist, constantly exploring new creative territories and connecting with audiences 
-                through the universal language of music.
+                At the core of tar1k's message is the unapologetic expression of aspirations and
+                the unfiltered truth of navigating life. Telling stories of love, growth and the contemporary
+                African condition, he showcases his versatility bouncing from the infectious uptempo percussions of his singles "Alima" &
+                "Feel Am", to the jazz inspired melodic confession of "Patch Am (freestyle)".
+              </p>
+
+              <p className="text-lg text-muted-foreground leading-relaxed">
+                tar1k's art is a testament to his relentless pursuit of excellence, driven by an
+                unwavering desire to carve out a legacy that not only solidifies his place in the music
+                industry but also fosters a community of dreamers and visionaries.
               </p>
             </div>
 
@@ -98,8 +99,8 @@ const AboutSection = () => {
               {/* Overlay Caption */}
               <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 via-black/40 to-transparent">
                 <div className="text-white">
-                  <div className="text-5xl md:text-6xl font-bold mb-1">TAR1K</div>
-                  <p className="text-white/80 text-lg">Musical Artist</p>
+                      <div className="text-5xl md:text-6xl font-bold mb-1 font-borel">Tar1k</div>
+                  <p className="text-white/80 text-lg">Musical Artist Founder. Performing Artist. Creative.</p>
                 </div>
               </div>
             </div>

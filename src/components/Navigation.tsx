@@ -43,15 +43,16 @@ const Navigation = () => {
 
   const navItems = [
     { label: "Home", href: "/" },
-    {
-      label: "Content",
-      subItems: [
-        { label: "Music", href: "/music" },
-        { label: "Videos", href: "/videos" },
-        { label: "Writing", href: "/writing" },
-        { label: "Gallery", href: "/gallery" },
-      ],
-    },
+        {
+          label: "Content",
+          subItems: [
+            { label: "Music", href: "/music" },
+            { label: "Videos", href: "/videos" },
+            { label: "Writing", href: "/writing" },
+            { label: "Gallery", href: "/gallery" },
+            { label: "Press Kit", href: "/press-kit" },
+          ],
+        },
     {
       label: "Community",
       subItems: [
@@ -74,13 +75,13 @@ const Navigation = () => {
     >
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
         {/* Logo */}
-        <a
-          href="/"
-          onClick={(e) => handleNavClick(e, "/")}
-          className="text-2xl font-bold tracking-tighter hover:text-primary transition-colors"
-        >
-          TAR1K
-        </a>
+            <a
+              href="/"
+              onClick={(e) => handleNavClick(e, "/")}
+              className="text-2xl font-bold tracking-tighter hover:text-primary transition-colors font-borel"
+            >
+              Tar1k
+            </a>
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center gap-8" ref={dropdownRef}>

@@ -6,7 +6,7 @@ import { ArrowDown, Play } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { TextHoverEffect } from "@/components/ui/text-hover-effect";
-import { Spotlight } from "@/components/ui/spotlight-new";
+import { GridBackground, Spotlight } from "@/components/ui/spotlight-new";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -85,6 +85,7 @@ const Hero = () => {
       className="min-h-screen flex items-end relative overflow-hidden pb-32"
     >
       {/* Spotlight background */}
+      <GridBackground />
       <Spotlight />
 
       <img
@@ -111,7 +112,7 @@ const Hero = () => {
         >
           <div className="h-px w-12 bg-primary" />
           <span className="text-xs md:text-sm font-semibold tracking-[0.3em] text-primary uppercase">
-            Welcome to my world
+            More than music
           </span>
         </div>
 
@@ -131,7 +132,7 @@ const Hero = () => {
           className="max-w-2xl"
         >
           <p className="text-lg md:text-2xl text-foreground/80 font-light mb-12 leading-relaxed">
-            Exploring sound, rhythm, and storytelling through innovative musical expression
+            Performing Artist, Poet, Multihyphenate
           </p>
 
           <div className="flex flex-wrap gap-4">

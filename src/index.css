@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Borel&family=Homemade+Apple&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -150,5 +152,15 @@ All colors MUST be HSL.
   .transform-gpu {
     transform: translateZ(0);
     will-change: transform;
+  }
+}
+
+@layer utilities {
+  .font-borel {
+    font-family: 'Borel', cursive;
+  }
+
+  .font-homemade {
+    font-family: 'Homemade Apple', cursive;
   }
 }

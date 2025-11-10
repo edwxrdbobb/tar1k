@@ -3,11 +3,10 @@ import Hero from "@/components/Hero";
 import VideoSection from "@/components/VideoSection";
 import MusicSection from "@/components/MusicSection";
 import AboutSection from "@/components/AboutSection";
-import EventsSection from "@/components/EventsSection";
+
 import GallerySection from "@/components/GallerySection";
 import NewsletterSection from "@/components/NewsletterSection";
 import ContactSection from "@/components/ContactSection";
-import Footer from "@/components/Footer";
 import { useSmoothScroll } from "@/hooks/useSmoothScroll";
 import gsap from "gsap";
 
@@ -55,13 +54,11 @@ const Index = () => {
       <Hero />
       <VideoSection />
       <AboutSection />
+      <NewsletterSection />
       <MusicSection />
-      <EventsSection />
       <GallerySection />
-      {/* <NewsletterSection /> */}
-      <ContactSection />
-      <Footer />
-    </div>
+          <ContactSection />
+        </div>
   );
 };
 
