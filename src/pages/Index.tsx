@@ -7,7 +7,6 @@ import AboutSection from "@/components/AboutSection";
 import GallerySection from "@/components/GallerySection";
 import NewsletterSection from "@/components/NewsletterSection";
 import ContactSection from "@/components/ContactSection";
-import Footer from "@/components/Footer";
 import { useSmoothScroll } from "@/hooks/useSmoothScroll";
 import gsap from "gsap";
 
@@ -58,9 +57,8 @@ const Index = () => {
       <NewsletterSection />
       <MusicSection />
       <GallerySection />
-      <ContactSection />
-      <Footer />
-    </div>
+          <ContactSection />
+        </div>
   );
 };
 

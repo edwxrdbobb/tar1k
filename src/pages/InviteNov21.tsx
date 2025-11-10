@@ -6,7 +6,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Resend } from 'resend';
 
 const InviteNov21 = () => {
   const [formData, setFormData] = useState({
@@ -23,48 +22,25 @@ const InviteNov21 = () => {
     });
   };
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const resend = new Resend(import.meta.env.VITE_RESEND_API_KEY);
-
     try {
-      // Send RSVP to organizer
-      await resend.emails.send({
-        from: 'onboarding@resend.dev', // Replace with your verified domain
-        to: 'edwardbobkamara@gmail.com',
-        subject: 'RSVP for Nothing Too Serious Event',
-        html: `
-          <p><strong>Full Name:</strong> ${formData.fullName}</p>
-          <p><strong>Email:</strong> ${formData.email}</p>
-          <p><strong>Phone Number:</strong> ${formData.phone}</p>
-          <p><strong>Designation:</strong> ${formData.designation}</p>
-        `,
+      setIsLoading(true);
+      const res = await fetch('/api/invite-nov21', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
       });
-
-      // Send confirmation to user
-      await resend.emails.send({
-        from: 'onboarding@resend.dev', // Replace with your verified domain
-        to: formData.email,
-        subject: 'RSVP Confirmation - Nothing Too Serious Event',
-        html: `
-          <h2>Thank you for your RSVP!</h2>
-          <p>Dear ${formData.fullName},</p>
-          <p>Your RSVP for the "Nothing Too Serious" event has been received. We're excited to have you join us!</p>
-          <p>Event Details:</p>
-          <ul>
-            <li>Event: Nothing Too Serious</li>
-            <li>Date: November 21st</li>
-            <li>Location: To be announced</li>
-          </ul>
-          <p>If you have any questions, please contact us.</p>
-          <p>Best regards,<br>TAR1K Team</p>
-        `,
-      });
-
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data?.success) throw new Error(data?.error || 'Failed');
       alert('RSVP submitted successfully! Check your email for confirmation.');
     } catch (error) {
       console.error(error);
       alert('Failed to submit RSVP. Please try again.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -89,13 +65,35 @@ const InviteNov21 = () => {
           </div>
         </div>
 
-        {/* RSVP Form */}
+            {/* Web Banner */}
+            <div className="relative overflow-hidden rounded-2xl border border-border mb-12">
+              <div
+                className="relative h-[360px] md:h-[420px] w-full"
+                style={{
+                  backgroundImage: `url(/ta8.webp)`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                }}
+              >
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
+                <div className="relative z-10 h-full w-full flex flex-col items-center justify-end text-center p-8">
+                  <div className="text-white/90 text-sm tracking-widest uppercase">Special Event</div>
+                  <h1 className="mt-2 text-4xl md:text-6xl font-bold text-white">Nothing Too Serious</h1>
+                  <p className="mt-2 text-white/90">November 21 • Location: TBA</p>
+                  <p className="mt-2 max-w-3xl text-white/80 text-sm">
+                    An intimate evening celebrating the sound, the words, and the work. Come open. Come comfortable.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* RSVP Form */}
         <Card className="max-w-2xl mx-auto">
           <CardHeader>
             <CardTitle className="text-2xl text-center">RSVP</CardTitle>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-6">
+                <form onSubmit={handleSubmit} className="space-y-6">
               <div>
                 <Label htmlFor="fullName">Full Name</Label>
                 <Input
@@ -148,10 +146,10 @@ const InviteNov21 = () => {
                 />
               </div>
 
-              <Button type="submit" className="w-full">
-                Submit RSVP
-              </Button>
-            </form>
+                  <Button type="submit" className="w-full" disabled={isLoading}>
+                    {isLoading ? 'Submitting...' : 'Submit RSVP'}
+                  </Button>
+                </form>
           </CardContent>
         </Card>
       </div>

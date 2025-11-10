@@ -9,11 +9,11 @@ const Footer = () => {
             © 2025 TAR1K Musical. All rights reserved.
           </p>
           
-          <div className="flex gap-6 text-sm text-muted-foreground">
-            <a href="#" className="hover:text-primary transition-colors">Privacy</a>
-            <a href="#" className="hover:text-primary transition-colors">Terms</a>
-            <a href="#" className="hover:text-primary transition-colors">Press Kit</a>
-          </div>
+              <div className="flex gap-6 text-sm text-muted-foreground">
+                <a href="#" className="hover:text-primary transition-colors">Privacy</a>
+                <a href="#" className="hover:text-primary transition-colors">Terms</a>
+                <a href="/press-kit" className="hover:text-primary transition-colors">Press Kit</a>
+              </div>
         </div>
       </div>
     </footer>

@@ -7,7 +7,8 @@ export default async function handler(req: any, res: any) {
   }
 
   try {
-    const { email } = req.body || {};
+    const body = typeof req.body === 'string' ? JSON.parse(req.body) : (req.body || {});
+    const { email } = body;
     if (!email) {
       res.status(400).json({ error: 'Email is required' });
       return;
@@ -32,4 +33,3 @@ export default async function handler(req: any, res: any) {
     res.status(500).json({ error: 'Failed to process subscription' });
   }
 }
-

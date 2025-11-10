@@ -6,7 +6,7 @@ import { ArrowDown, Play } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { TextHoverEffect } from "@/components/ui/text-hover-effect";
-import { Spotlight } from "@/components/ui/spotlight-new";
+import { GridBackground, Spotlight } from "@/components/ui/spotlight-new";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -85,6 +85,7 @@ const Hero = () => {
       className="min-h-screen flex items-end relative overflow-hidden pb-32"
     >
       {/* Spotlight background */}
+      <GridBackground />
       <Spotlight />
 
       <img

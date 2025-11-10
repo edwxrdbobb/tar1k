@@ -7,7 +7,8 @@ export default async function handler(req: any, res: any) {
   }
 
   try {
-    const { name, email, message } = req.body || {};
+    const body = typeof req.body === 'string' ? JSON.parse(req.body) : (req.body || {});
+    const { name, email, message } = body;
     if (!name || !email || !message) {
       res.status(400).json({ error: 'Missing required fields' });
       return;
@@ -28,4 +29,3 @@ export default async function handler(req: any, res: any) {
     res.status(500).json({ error: 'Failed to send message' });
   }
 }
-

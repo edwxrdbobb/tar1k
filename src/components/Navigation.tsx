@@ -43,15 +43,16 @@ const Navigation = () => {
 
   const navItems = [
     { label: "Home", href: "/" },
-    {
-      label: "Content",
-      subItems: [
-        { label: "Music", href: "/music" },
-        { label: "Videos", href: "/videos" },
-        { label: "Writing", href: "/writing" },
-        { label: "Gallery", href: "/gallery" },
-      ],
-    },
+        {
+          label: "Content",
+          subItems: [
+            { label: "Music", href: "/music" },
+            { label: "Videos", href: "/videos" },
+            { label: "Writing", href: "/writing" },
+            { label: "Gallery", href: "/gallery" },
+            { label: "Press Kit", href: "/press-kit" },
+          ],
+        },
     {
       label: "Community",
       subItems: [
