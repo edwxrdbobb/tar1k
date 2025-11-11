@@ -84,22 +84,25 @@ const Hero = () => {
       ref={heroRef}
       className="min-h-screen flex items-end relative overflow-hidden pb-32"
     >
-      {/* Spotlight background */}
-      <GridBackground />
-      <Spotlight />
+      <div className="absolute inset-0 z-0">
+        <img
+          src="/ta07.webp"
+          alt="Hero Background"
+          className="w-full h-full object-cover"
+          style={{ objectFit: 'cover', width: '100%', height: '100%' }}
+        />
+      </div>
 
-      <img
-        src="/ta07.webp"
-        alt="Hero Background"
-        className="absolute inset-0 w-full h-full object-cover z-0"
-        style={{ objectFit: 'cover', width: '100%', height: '100%' }}
-      />
-      
       {/* Gradient overlay - Adjusted for spotlight visibility */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/60 to-background z-[1]" />
-      
-      {/* Enhanced shader background visibility */}
-      <div className="absolute inset-0 z-0" />
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/60 to-background z-[1] pointer-events-none" />
+
+      <div className="absolute inset-0 z-[2] opacity-70 pointer-events-none">
+        <GridBackground />
+      </div>
+
+      <div className="absolute inset-0 z-[3] pointer-events-none">
+        <Spotlight />
+      </div>
       
       <div 
         ref={overlayRef}
@@ -123,6 +126,7 @@ const Hero = () => {
         >
           <div className="overflow-hidden">
             <TextHoverEffect text="TAR1K" />
+            {/* <span className="font-brittany">TAR1K</span> */}
           </div>
         </h1>
 

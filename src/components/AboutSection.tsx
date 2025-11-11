@@ -59,7 +59,7 @@ const AboutSection = () => {
       <div className="container mx-auto px-4 py-20">
         <div className="max-w-4xl mx-auto">
               <h2 className="text-4xl md:text-5xl font-bold mb-12 text-center">
-                About <span className="font-borel">Tar1k</span>
+                About <span className="font-brittany">Tar1k</span>
               </h2>
 
           <div className="grid md:grid-cols-2 gap-12 items-center">
@@ -99,7 +99,7 @@ const AboutSection = () => {
               {/* Overlay Caption */}
               <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 via-black/40 to-transparent">
                 <div className="text-white">
-                      <div className="text-5xl md:text-6xl font-bold mb-1 font-borel">Tar1k</div>
+                      <div className="text-5xl md:text-6xl font-bold mb-1 font-brittany">Tar1k</div>
                   <p className="text-white/80 text-lg">Musical Artist Founder. Performing Artist. Creative.</p>
                 </div>
               </div>

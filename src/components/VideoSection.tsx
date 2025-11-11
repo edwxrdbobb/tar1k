@@ -118,9 +118,9 @@ const VideoSection = () => {
     <section
       id="videos"
       ref={sectionRef}
-      className=" bg-secondary/30 relative"
+      className="relative overflow-hidden bg-secondary/30"
     >
-      <BeamsBackground intensity="subtle" >
+      <BeamsBackground intensity="medium" className="bg-transparent">
       <div className="container mx-auto px-4 py-20">
         <div className="max-w-4xl mx-auto">
           {/* ---------- Title ---------- */}
@@ -128,9 +128,9 @@ const VideoSection = () => {
             ref={titleRef}
             className="text-4xl md:text-5xl font-bold mb-4 text-center"
           >
-            Featured <span className="font-borel">Tracks</span>
+            Featured <span className="font-brittany">Tracks</span>
           </h2>
-          <p className="text-muted-foreground text-center mb-12 font-borel">
+          <p className="text-muted-foreground text-center mb-12">
             Listen to the latest from tar1k
           </p>
 
