@@ -115,7 +115,7 @@ const MusicSection = () => {
   ];
 
   return (
-    <section id="music" ref={sectionRef} className="py-20 ">
+    <section id="music" ref={sectionRef} className="py-8">
       <BackgroundCells className="bg-secondary/10" >
       <div className="container mx-auto px-4">
         <div className="max-w-5xl mx-auto">
@@ -208,71 +208,9 @@ const MusicSection = () => {
               </p>
             </div>
           </div>
-
-          {/* Optional: Small footer note */}
-          <div className="mt-12 text-center text-sm text-muted-foreground">
-            More platforms coming soon: Apple Music, YouTube Music, Boomplay
-          </div>
         </div>
           </div>
-          
-          {/* Discography Section */}
-          <div className="mt-20 max-w-5xl mx-auto">
-            <div className="text-center mb-8">
-              <h3 className="text-3xl md:text-4xl font-bold mb-2">Discography</h3>
-              <p className="text-muted-foreground">Key releases with credits straight from the press kit</p>
-            </div>
-
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {discography.map((release) => (
-                <article
-                  key={release.title}
-                  className="rounded-2xl border border-border bg-secondary/20 shadow-lg transition hover:-translate-y-1 hover:shadow-primary/20"
-                >
-                  <div className="aspect-square overflow-hidden rounded-t-2xl border-b border-border/40 bg-gradient-to-br from-muted to-background">
-                    {release.cover ? (
-                      <img
-                        src={release.cover}
-                        alt={`${release.title} artwork`}
-                        className="h-full w-full object-cover"
-                        loading="lazy"
-                      />
-                    ) : (
-                      <div className="flex h-full w-full items-center justify-center text-4xl font-black tracking-tight">
-                        {release.title.charAt(0)}
-                      </div>
-                    )}
-                  </div>
-                  <div className="space-y-4 p-5">
-                    <div>
-                      <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                        {release.type}
-                      </p>
-                      <h4 className="text-xl font-semibold leading-tight">{release.title}</h4>
-                    </div>
-                    <div>
-                      <p className="text-sm font-semibold text-primary">Release Date</p>
-                      <p className="text-sm text-muted-foreground">{release.releaseDate}</p>
-                    </div>
-                    <div>
-                      <p className="text-sm font-semibold mb-1">Credits</p>
-                      <ul className="list-disc space-y-1 pl-4 text-sm text-muted-foreground">
-                        {release.credits.map((credit) => (
-                          <li key={credit}>{credit}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-                </article>
-              ))}
-            </div>
-
-            <div className="text-center mt-10">
-              <a href={encodeURI('/tar1k august updated press kit.pdf')} target="_blank" rel="noreferrer" className="inline-block text-sm text-primary hover:underline">
-                View full discography in the Press Kit
-              </a>
-            </div>
-          </div>
+ 
           </BackgroundCells>
         </section>
   );

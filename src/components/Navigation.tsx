@@ -75,13 +75,19 @@ const Navigation = () => {
     >
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
         {/* Logo */}
-            <a
-              href="/"
-              onClick={(e) => handleNavClick(e, "/")}
-              className="text-2xl font-bold tracking-tighter hover:text-primary transition-colors font-borel"
-            >
-              Tar1k
-            </a>
+        <a
+          href="/"
+          onClick={(e) => handleNavClick(e, "/")}
+          className="inline-flex items-center"
+        >
+          <img
+            src="/logo.png"
+            alt="tar1k logo"
+            className="h-9 w-auto object-contain drop-shadow-lg"
+            loading="lazy"
+          />
+          <span className="sr-only">Tar1k</span>
+        </a>
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center gap-8" ref={dropdownRef}>

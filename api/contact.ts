@@ -1,4 +1,66 @@
-import { Resend } from 'resend';
+import { getContactEmail, getFromEmail, getResendClient } from './_shared/resend';
+
+export interface ContactPayload {
+  name: string;
+  email: string;
+  message: string;
+}
+
+export function parseContactPayload(input: unknown): ContactPayload {
+  let body: any = input ?? {};
+
+  if (typeof body === 'string') {
+    if (!body.trim()) body = {};
+    else {
+      try {
+        body = JSON.parse(body);
+      } catch {
+        throw new Error('Invalid JSON payload');
+      }
+    }
+  }
+
+  if (typeof body !== 'object' || Array.isArray(body)) {
+    throw new Error('Invalid payload format');
+  }
+
+  const payload: ContactPayload = {
+    name: String(body.name ?? '').trim(),
+    email: String(body.email ?? '').trim(),
+    message: String(body.message ?? '').trim(),
+  };
+
+  if (!payload.name || !payload.email || !payload.message) {
+    throw new Error('Missing required fields');
+  }
+
+  return payload;
+}
+
+export async function sendContactEmails(payload: ContactPayload) {
+  const resend = getResendClient();
+  const from = getFromEmail();
+  const to = getContactEmail();
+
+  await resend.emails.send({
+    from,
+    to: [to],
+    reply_to: payload.email,
+    subject: `[Contact] ${payload.name} via TAR1K`,
+    html: `<p><strong>Name:</strong> ${payload.name}</p>
+           <p><strong>Email:</strong> ${payload.email}</p>
+           <p style="white-space:pre-wrap">${payload.message}</p>`,
+  });
+
+  await resend.emails.send({
+    from,
+    to: [payload.email],
+    subject: 'Thanks for reaching out to TAR1K',
+    html: `<p>Hi ${payload.name.split(' ')[0] || payload.name},</p>
+           <p>Got your message — thank you for reaching out. I’ll read it and circle back shortly.</p>
+           <p>Talk soon,<br/>TAR1K</p>`,
+  });
+}
 
 export default async function handler(req: any, res: any) {
   if (req.method !== 'POST') {
@@ -7,25 +69,16 @@ export default async function handler(req: any, res: any) {
   }
 
   try {
-    const body = typeof req.body === 'string' ? JSON.parse(req.body) : (req.body || {});
-    const { name, email, message } = body;
-    if (!name || !email || !message) {
-      res.status(400).json({ error: 'Missing required fields' });
-      return;
-    }
-
-    const resend = new Resend(process.env.RESEND_API_KEY);
-
-    await resend.emails.send({
-      from: process.env.RESEND_FROM_EMAIL || 'onboarding@resend.dev',
-      to: [process.env.CONTACT_TO_EMAIL || 'edwardbobkamara@gmail.com'],
-      reply_to: email,
-      subject: `[Contact] ${name} via TAR1K`,
-      text: `Name: ${name}\nEmail: ${email}\n\n${message}`,
+    const payload = parseContactPayload(req.body);
+    await sendContactEmails(payload);
+    res.status(200).json({ success: true, message: 'Message delivered. Check your inbox for confirmation.' });
+  } catch (error: any) {
+    const isBadRequest = /Missing required fields|Invalid JSON payload|Invalid payload format/.test(
+      error?.message ?? ''
+    );
+    res.status(isBadRequest ? 400 : 500).json({
+      error: isBadRequest ? error.message : 'Failed to send message',
+      details: isBadRequest ? undefined : error?.message ?? 'Unknown error',
     });
-
-    res.status(200).json({ success: true });
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to send message' });
   }
 }

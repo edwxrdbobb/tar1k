@@ -52,7 +52,7 @@ const GallerySection = () => {
             duration: 0.5,
             ease: "elastic.out(1, 0.5)",
           });
-        });
+        }); 
       });
     }, sectionRef);
 

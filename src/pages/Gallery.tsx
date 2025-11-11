@@ -12,6 +12,16 @@ interface GalleryImage {
 }
 
 const IMAGES_PER_PAGE = 12;
+const DRIVE_DIRECT_HOST = "https://drive.googleusercontent.com/uc";
+
+const buildDriveImageSrc = (shareUrl: string) => {
+  // Matches both /d/{id}/view and open?id={id} style links.
+  const idMatch = shareUrl.match(/[-\w]{25,}/);
+  if (!idMatch) return shareUrl;
+
+  const driveId = idMatch[0];
+  return `${DRIVE_DIRECT_HOST}?id=${driveId}&export=view`;
+};
 
 const GalleryPage = () => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
@@ -53,15 +63,9 @@ const GalleryPage = () => {
     ];
 
     return entries.map((image, index) => {
-      const idMatch = image.url.match(/\/d\/([^/]+)\//);
-      const driveId = idMatch?.[1] || "";
-      const src = driveId
-        ? `https://drive.google.com/uc?export=view&id=${driveId}`
-        : image.url;
-
       return {
         id: baseImages.length + index + 1,
-        src,
+        src: buildDriveImageSrc(image.url),
         alt: `${image.event} ${index + 1}`,
         category: "live" as const,
       };
