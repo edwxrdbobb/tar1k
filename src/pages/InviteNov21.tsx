@@ -73,11 +73,14 @@ export default function InviteNov21() {
 
             <div className="max-w-3xl mx-auto mt-8 space-y-4 text-lg leading-relaxed">
               {[
-                "A night where the music, poetry and vibes collide… but *nothing too serious*.",
-                "First-look at my debut film **Before You Wake** (popcorn not included).",
-                "Grab limited-edition & keepsakes – because who doesn’t love a souvenir?",
-                "Real talks, real people, zero pretence. Just art, laughs and good company.",
-                "Come comfy, come open – perfection can wait till tomorrow.",
+                "You’re invited to the culmination of a journey, a lifetime in the making. A synthesis of the sound, the poetry, the words, and the work that threads them all through the centre.",
+                "“Nothing too Serious” is an acknowledgement of effort aggregated and a venture into new frontiers. A return to the passion that painted the poetry. The soul that sired the sound. An ode to a time when we did things for the sake of it. When everything we did was a byproduct of who we were and not anything we were supposed to be.",
+                "So come ready - To an intimate night of music, poetry, and vibes.",
+                "An exclusive first peek at my first film - “Before You Wake”",
+                "Limited keepsakes for your purchase and pleasure.",
+                "Enjoy real conversations with real people, about art and it’s making.",
+                "Relax, as we remove the veil between released and unreleased work. Perfection and symmetry will wait until we have had our fill of the night.",
+                "So come open, and come comfortable. After all… It’s Nothing Too Serious.",
               ].map((line, i) => (
                 <p
                   key={i}
@@ -88,7 +91,7 @@ export default function InviteNov21() {
                 </p>
               ))}
               <p className="mt-6 font-semibold text-xl text-gray-400">
-                November 21 • Location: TBA • It’s **Nothing Too Serious**.
+                November 21 • Location: TBA • It’s Nothing Too Serious.
               </p>
             </div>
           </div>
