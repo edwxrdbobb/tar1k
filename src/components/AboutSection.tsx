@@ -100,7 +100,7 @@ const AboutSection = () => {
               <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 via-black/40 to-transparent">
                 <div className="text-white">
                       <div className="text-5xl md:text-6xl font-bold mb-1 font-brittany">Tar1k</div>
-                  <p className="text-white/80 text-lg">Musical Artist Founder. Performing Artist. Creative.</p>
+                  <p className="text-white/80 text-lg">Founder. Performing Artist. Creative.</p>
                 </div>
               </div>
             </div>

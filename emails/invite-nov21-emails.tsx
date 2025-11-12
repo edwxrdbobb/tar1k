@@ -5,6 +5,7 @@ import {
   Head,
   Hr,
   Html,
+  Img,
   Preview,
   Section,
   Text,
@@ -15,6 +16,8 @@ interface InviteNov21EmailProps {
   email: string;
   phone: string;
   designation: string;
+  qrCodeDataUrl?: string;
+  qrToken?: string;
 }
 
 const baseFont =
@@ -43,56 +46,113 @@ const badgeStyle: React.CSSProperties = {
 
 export const InviteNov21GuestEmail = ({
   fullName,
+  qrCodeDataUrl,
 }: InviteNov21EmailProps) => (
   <Html>
     <Head />
-    <Preview>You're on the list — Nothing Too Serious RSVP confirmed.</Preview>
-    <Body style={{ backgroundColor: '#f7f7f7', padding: '32px 0' }}>
-      <Container style={{ backgroundColor: '#ffffff', borderRadius: 16, padding: 32, width: 560, fontFamily: baseFont }}>
-        <Section style={{ ...baseTextStyles, fontSize: '16px' }}>
-          <div style={badgeStyle}>RSVP Confirmed</div>
-          <Text style={{ fontSize: 26, fontWeight: 700, margin: '16px 0 8px' }}>
+    <Preview>Your spot is reserved — Nothing Too Serious</Preview>
+    <Body style={{ backgroundColor: '#050505', padding: '32px 0', fontFamily: baseFont }}>
+      <Container
+        style={{
+          backgroundColor: '#0f0f0f',
+          borderRadius: 24,
+          padding: 36,
+          width: 580,
+          color: '#f6f6f6',
+          border: '1px solid #1f1f1f',
+          boxShadow: '0 30px 80px rgba(0,0,0,0.65)',
+        }}
+      >
+        <Section style={{ ...baseTextStyles, color: '#f6f6f6', fontSize: 16 }}>
+          <div style={{ ...badgeStyle, backgroundColor: '#f6e05e', color: '#090909' }}>
+            You’re In
+          </div>
+          <Text style={{ fontSize: 32, fontWeight: 800, margin: '18px 0 10px' }}>
             Nothing Too Serious
           </Text>
-          <Text style={{ marginBottom: 12 }}>Hi {fullName.split(' ')[0] || fullName},</Text>
-          <Text style={{ marginBottom: 12 }}>
-            Thank you for locking in your spot. Expect a night where the music, poetry, film and
-            raw conversations meet with no filter.
+          <Text style={{ marginBottom: 16 }}>
+            Thank you, {fullName.split(' ')[0] || fullName}, for confirming your attendance at
+            Nothing Too Serious — an evening of music, poetry, film, and conversation curated by
+            tar1k.
+          </Text>
+          <Text style={{ marginBottom: 16 }}>
+            This is a moment suspended between reflection and becoming — a celebration of effort,
+            collaboration, and authenticity. Come open, come curious, and come ready to enjoy art
+            for its own sake.
           </Text>
           <Section
             style={{
-              border: '1px solid #ececec',
-              borderRadius: 12,
-              padding: 16,
-              margin: '20px 0',
-              background: '#fafafa',
+              borderRadius: 18,
+              background: 'linear-gradient(145deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03))',
+              padding: 20,
+              margin: '24px 0',
+              border: '1px solid rgba(255,255,255,0.08)',
             }}
           >
-            <Text style={{ margin: 0 }}>
-              <strong>Date:</strong> November 21, 2025
+            <Text style={{ fontWeight: 600, textTransform: 'uppercase', letterSpacing: 1.5, marginBottom: 12 }}>
+              Event Details
             </Text>
-            <Text style={{ margin: '6px 0' }}>
-              <strong>Location:</strong> TBA (we&apos;ll send the coordinates privately)
-            </Text>
-            <Text style={{ margin: 0 }}>
-              <strong>Dress code:</strong> Comfortable, ready to move &amp; listen
-            </Text>
+            <Text style={{ margin: 0 }}>📍 Venue: Freetown Aqua Sports Club</Text>
+            <Text style={{ margin: '6px 0' }}>📅 Date: Friday, 21st November</Text>
+            <Text style={{ margin: 0 }}>⏰ Time: 7:00 PM – 10:00 PM</Text>
           </Section>
-          <Text style={{ fontWeight: 600, marginBottom: 8 }}>On the night</Text>
-          <ul style={{ paddingLeft: 20, margin: '0 0 20px' }}>
-            <li>Live performances &amp; intimate readings</li>
-            <li>First screening of “Before You Wake”</li>
-            <li>Limited keepsakes for purchase</li>
-            <li>Real conversations about the art &amp; the work</li>
-          </ul>
-          <Text style={{ marginBottom: 12 }}>
-            Keep an eye on your inbox; final details and arrival instructions will follow soon.
-            Until then, stay open, stay curious — it&apos;s Nothing Too Serious.
+          <Section
+            style={{
+              borderRadius: 18,
+              padding: 20,
+              marginBottom: 24,
+              border: '1px solid rgba(255,255,255,0.08)',
+            }}
+          >
+            <Text style={{ fontWeight: 600, textTransform: 'uppercase', letterSpacing: 1.5, marginBottom: 12 }}>
+              Evening Flow
+            </Text>
+            <ul style={{ paddingLeft: 18, margin: 0 }}>
+              <li>7:00 – 7:45 | Arrivals &amp; Welcome</li>
+              <li>8:00 – 8:20 | First Performance</li>
+              <li>8:30 – 9:00 | “Before You Wake” — Film Screening</li>
+              <li>9:10 – 9:30 | Fireside Conversation</li>
+              <li>9:35 – 10:00 | Final Performance</li>
+            </ul>
+          </Section>
+          <Text style={{ marginBottom: 20 }}>
+            Dress Code: Come comfortable. It’s Nothing Too Serious.
           </Text>
-          <Text style={{ marginTop: 24 }}>
-            See you soon,
+          {qrCodeDataUrl ? (
+            <Section
+              style={{
+                borderRadius: 18,
+                padding: 24,
+                border: '1px dashed rgba(255,255,255,0.2)',
+                textAlign: 'center',
+                marginBottom: 24,
+                backgroundColor: 'rgba(0,0,0,0.2)',
+              }}
+            >
+              <Text style={{ marginBottom: 12, fontWeight: 600 }}>
+                Bring this QR code to check in on the night.
+              </Text>
+              <Img
+                alt="Nothing Too Serious QR Code"
+                src={qrCodeDataUrl}
+                width="180"
+                height="180"
+                style={{ display: 'block', margin: '0 auto 12px' }}
+              />
+              <Text style={{ fontSize: 13, color: '#d1d1d1' }}>
+                We’ll scan it to verify your RSVP at the entrance.
+              </Text>
+            </Section>
+          ) : null}
+          <Text style={{ marginBottom: 16 }}>
+            We look forward to sharing this space with you.
+          </Text>
+          <Text>
+            Warmly,
             <br />
-            TAR1K
+            tar1k &amp; Team
+            <br />
+            @onlytar1k
           </Text>
         </Section>
       </Container>
@@ -105,6 +165,7 @@ export const InviteNov21OrganizerEmail = ({
   email,
   phone,
   designation,
+  qrToken,
 }: InviteNov21EmailProps) => (
   <Html>
     <Head />
@@ -150,6 +211,11 @@ export const InviteNov21OrganizerEmail = ({
             <Text style={{ margin: 0 }}>
               <strong>Designation:</strong> {designation}
             </Text>
+            {qrToken ? (
+              <Text style={{ margin: '12px 0 0', fontSize: 13, color: '#bbbbbb' }}>
+                QR Token: <code>{qrToken}</code>
+              </Text>
+            ) : null}
           </Section>
           <Hr style={{ borderColor: '#1e1e1e', margin: '24px 0' }} />
           <Text style={{ fontSize: 13, color: '#8c8c8c' }}>
