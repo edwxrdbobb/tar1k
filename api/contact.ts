@@ -1,4 +1,5 @@
-import { getContactEmail, getFromEmail, getResendClient } from './_shared/resend';
+import { getContactEmails, getFromEmail, getResendClient } from './_shared/resend';
+import { getSupabaseClient } from './_shared/supabase';
 
 export interface ContactPayload {
   name: string;
@@ -37,14 +38,27 @@ export function parseContactPayload(input: unknown): ContactPayload {
   return payload;
 }
 
+async function persistContactMessage(payload: ContactPayload) {
+  const supabase = getSupabaseClient();
+  const { error } = await supabase.from('contact_messages').insert({
+    name: payload.name,
+    email: payload.email,
+    message: payload.message,
+  });
+
+  if (error) {
+    throw new Error(`Failed to store contact submission: ${error.message}`);
+  }
+}
+
 export async function sendContactEmails(payload: ContactPayload) {
   const resend = getResendClient();
   const from = getFromEmail();
-  const to = getContactEmail();
+  const to = getContactEmails();
 
   await resend.emails.send({
     from,
-    to: [to],
+    to,
     reply_to: payload.email,
     subject: `[Contact] ${payload.name} via TAR1K`,
     html: `<p><strong>Name:</strong> ${payload.name}</p>
@@ -62,6 +76,11 @@ export async function sendContactEmails(payload: ContactPayload) {
   });
 }
 
+export async function processContactSubmission(payload: ContactPayload) {
+  await persistContactMessage(payload);
+  await sendContactEmails(payload);
+}
+
 export default async function handler(req: any, res: any) {
   if (req.method !== 'POST') {
     res.status(405).json({ error: 'Method Not Allowed' });
@@ -70,7 +89,7 @@ export default async function handler(req: any, res: any) {
 
   try {
     const payload = parseContactPayload(req.body);
-    await sendContactEmails(payload);
+    await processContactSubmission(payload);
     res.status(200).json({ success: true, message: 'Message delivered. Check your inbox for confirmation.' });
   } catch (error: any) {
     const isBadRequest = /Missing required fields|Invalid JSON payload|Invalid payload format/.test(

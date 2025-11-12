@@ -1,4 +1,5 @@
-import { getContactEmail, getFromEmail, getResendClient } from './_shared/resend';
+import { getContactEmails, getFromEmail, getResendClient } from './_shared/resend';
+import { getSupabaseClient } from './_shared/supabase';
 
 export interface NewsletterPayload {
   email: string;
@@ -30,10 +31,24 @@ export function parseNewsletterPayload(input: unknown): NewsletterPayload {
   return { email };
 }
 
+async function persistNewsletterSubscription(payload: NewsletterPayload) {
+  const supabase = getSupabaseClient();
+  const { error } = await supabase
+    .from('newsletter_subscribers')
+    .upsert(
+      { email: payload.email },
+      { onConflict: 'email' }
+    );
+
+  if (error) {
+    throw new Error(`Failed to store newsletter subscription: ${error.message}`);
+  }
+}
+
 export async function handleNewsletterSubscription(payload: NewsletterPayload) {
   const resend = getResendClient();
   const from = getFromEmail();
-  const to = getContactEmail();
+  const to = getContactEmails();
   const audienceId = process.env.RESEND_AUDIENCE_ID;
 
   if (audienceId) {
@@ -41,7 +56,7 @@ export async function handleNewsletterSubscription(payload: NewsletterPayload) {
   } else {
     await resend.emails.send({
       from,
-      to: [to],
+      to,
       subject: '[Newsletter] New subscriber',
       html: `<p>New subscriber:</p><p><strong>${payload.email}</strong></p>`,
     });
@@ -57,6 +72,11 @@ export async function handleNewsletterSubscription(payload: NewsletterPayload) {
   });
 }
 
+export async function processNewsletterSubscription(payload: NewsletterPayload) {
+  await persistNewsletterSubscription(payload);
+  await handleNewsletterSubscription(payload);
+}
+
 export default async function handler(req: any, res: any) {
   if (req.method !== 'POST') {
     res.status(405).json({ error: 'Method Not Allowed' });
@@ -65,7 +85,7 @@ export default async function handler(req: any, res: any) {
 
   try {
     const payload = parseNewsletterPayload(req.body);
-    await handleNewsletterSubscription(payload);
+    await processNewsletterSubscription(payload);
     res.status(200).json({ success: true, message: 'Subscribed! Check your email for confirmation.' });
   } catch (error: any) {
     const isBadRequest = /Invalid JSON payload|Invalid payload format|Email is required/.test(

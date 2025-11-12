@@ -15,7 +15,8 @@ interface InviteNov21EmailProps {
   fullName: string;
   email: string;
   phone: string;
-  designation: string;
+  community: string;
+  affiliation: string;
   qrCodeDataUrl?: string;
   qrToken?: string;
 }
@@ -164,7 +165,8 @@ export const InviteNov21OrganizerEmail = ({
   fullName,
   email,
   phone,
-  designation,
+  community,
+  affiliation,
   qrToken,
 }: InviteNov21EmailProps) => (
   <Html>
@@ -209,7 +211,10 @@ export const InviteNov21OrganizerEmail = ({
               <strong>Phone:</strong> {phone}
             </Text>
             <Text style={{ margin: 0 }}>
-              <strong>Designation:</strong> {designation}
+              <strong>Community:</strong> {community}
+            </Text>
+            <Text style={{ margin: '6px 0 0' }}>
+              <strong>Affiliation:</strong> {affiliation}
             </Text>
             {qrToken ? (
               <Text style={{ margin: '12px 0 0', fontSize: 13, color: '#bbbbbb' }}>

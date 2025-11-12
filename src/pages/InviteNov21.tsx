@@ -6,8 +6,22 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
-import { SparklesText } from "@/components/ui/sparkles-text"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { SparklesText } from '@/components/ui/sparkles-text';
 import { Typewriter } from '@/components/ui/typewriter-text';
+
+const COMMUNITY_OPTIONS = [
+  'The Maker (Fellow artists, designers, musicians)',
+  'The Storyteller (Media, journalists, press)',
+  'The Enabler (Patrons, investors, executives, sponsors)',
+  'The Vibe (Community, friend, general supporter)',
+];
 
 const resolveApiUrl = () => {
   const envBase = import.meta.env.VITE_API_BASE_URL?.trim();
@@ -23,12 +37,15 @@ const resolveApiUrl = () => {
 };
 
 export default function InviteNov21() {
-  const [formData, setFormData] = useState({
+  const initialFormState = {
     fullName: '',
     email: '',
     phone: '',
-    designation: '',
-  });
+    community: '',
+    affiliation: '',
+  };
+
+  const [formData, setFormData] = useState(initialFormState);
 
   const [isLoading, setIsLoading] = useState(false);
   const [hasConfirmed, setHasConfirmed] = useState(false);
@@ -41,11 +58,11 @@ export default function InviteNov21() {
   ];
 
   const flowOfEvents = [
-    { time: '7:00 – 7:45 PM', detail: 'Arrivals (Introduction and Welcome)' },
-    { time: '8:00 – 8:20 PM', detail: 'First Performance (Acoustic, Poetic Core)' },
+    { time: '7:00 – 7:45 PM', detail: 'Arrivals' },
+    { time: '8:00 – 8:20 PM', detail: 'First Performance' },
     { time: '8:30 – 9:00 PM', detail: 'Short Film Aired (“Before You Wake”)' },
     { time: '9:10 – 9:30 PM', detail: 'Fireside Chat (Q&A / Conversation)' },
-    { time: '9:35 – 10:00 PM', detail: 'Final Performance (Full Vibe)' },
+    { time: '9:35 – 10:00 PM', detail: 'Final Performance' },
   ];
 
   const handleChange = (
@@ -57,6 +74,11 @@ export default function InviteNov21() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setMessage(null);
+
+    if (!formData.community) {
+      setMessage('Please select your creative archetype before you RSVP.');
+      return;
+    }
 
     if (!hasConfirmed) {
       setMessage('Please confirm your vibe before you RSVP.');
@@ -77,7 +99,7 @@ export default function InviteNov21() {
       if (!res.ok) throw new Error(data.error ?? `HTTP ${res.status}`);
 
       setMessage(data?.message ?? 'RSVP submitted! Check your inbox.');
-      setFormData({ fullName: '', email: '', phone: '', designation: '' });
+      setFormData(initialFormState);
       setHasConfirmed(false);
     } catch (err: any) {
       console.error(err);
@@ -101,14 +123,7 @@ export default function InviteNov21() {
                 {line}
               </p>
             ))}
-            <p>
-              So come ready — to an intimate night of music, poetry, vibes, and real
-              conversations with people who love to build beautiful things.
-            </p>
-            <p>
-              Enjoy limited keepsakes for your purchase and pleasure and an exclusive
-              first peek at my first film, “Before You Wake”.
-            </p>
+           
           </div>
           <p className="text-lg font-semibold text-amber-200">
             <Typewriter
@@ -160,15 +175,21 @@ export default function InviteNov21() {
                   What to Expect
                 </dt>
                 <dd className="text-base text-gray-50">
-                  An exclusive first peek at my first cinematic collaboration — a film
-                  inspired by poetry.
+                  <ul className="list-disc list-inside space-y-2">
+                    <li>
+                      An exclusive first peek at my first cinematic collaboration — a film
+                      inspired by poetry.
+                    </li>
+                    <li>An intimate night of music, poetry and vibes</li>
+                    <li>Real conversations with real people about art and its making</li>
+                  </ul>
                 </dd>
               </div>
             </dl>
           </div>
 
           <div className="rounded-3xl border border-white/5 bg-white/5 bg-gradient-to-br from-white/5 via-transparent to-transparent p-6 shadow-2xl shadow-black/40 backdrop-blur">
-            <h3 className="text-lg font-semibold text-amber-00">Flow of Events</h3>
+            <h3 className="text-lg font-semibold text-amber-200">Flow of Events</h3>
             <ul className="mt-6 space-y-5">
               {flowOfEvents.map((event) => (
                 <li key={event.time}>
@@ -197,7 +218,7 @@ export default function InviteNov21() {
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-6">
-              {(['fullName', 'email', 'phone', 'designation'] as const).map(
+              {(['fullName', 'email', 'phone'] as const).map(
                 (field) => (
                   <div key={field}>
                     <Label htmlFor={field} className="text-gray-300">
@@ -214,16 +235,54 @@ export default function InviteNov21() {
                       required
                       value={formData[field]}
                       onChange={handleChange}
-                      placeholder={
-                        field === 'designation'
-                          ? 'e.g., Independent Creative, Organisation'
-                          : ''
-                      }
                       className="bg-white/5 text-gray-100 placeholder:text-gray-500"
                     />
                   </div>
                 )
               )}
+
+              <div>
+                <Label htmlFor="community" className="text-gray-300">
+                  Community
+                </Label>
+                <Select
+                  value={formData.community}
+                  onValueChange={(value) =>
+                    setFormData((prev) => ({ ...prev, community: value }))
+                  }
+                >
+                  <SelectTrigger
+                    id="community"
+                    aria-required="true"
+                    className="mt-2 h-12 border-white/10 bg-white/5 text-gray-100"
+                  >
+                    <SelectValue placeholder="Select Your Creative Archetype" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-[#111] text-gray-100">
+                    {COMMUNITY_OPTIONS.map((option) => (
+                      <SelectItem key={option} value={option}>
+                        {option}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
+                <Label htmlFor="affiliation" className="text-gray-300">
+                  Affiliation
+                </Label>
+                <Input
+                  id="affiliation"
+                  name="affiliation"
+                  type="text"
+                  required
+                  value={formData.affiliation}
+                  onChange={handleChange}
+                  placeholder="e.g., Collective, Studio, Brand"
+                  className="bg-white/5 text-gray-100 placeholder:text-gray-500"
+                />
+              </div>
 
               <div className="flex items-start gap-3 rounded-2xl border border-white/10 bg-white/5 p-4">
                 <Checkbox

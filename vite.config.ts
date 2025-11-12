@@ -4,31 +4,34 @@ import path from "path";
 import type { IncomingMessage, ServerResponse } from "http";
 import {
   parseInviteNov21Payload,
-  sendInviteNov21Emails,
+  processInviteNov21,
 } from "./api/invite-nov21";
-import { parseContactPayload, sendContactEmails } from "./api/contact";
 import {
-  handleNewsletterSubscription,
+  parseContactPayload,
+  processContactSubmission,
+} from "./api/contact";
+import {
   parseNewsletterPayload,
+  processNewsletterSubscription,
 } from "./api/newsletter";
 
 const apiRoutes = [
   {
     path: "/api/invite-nov21",
     parse: parseInviteNov21Payload,
-    handler: sendInviteNov21Emails,
+    handler: processInviteNov21,
     successMessage: "RSVP submitted! Check your inbox for confirmation.",
   },
   {
     path: "/api/contact",
     parse: parseContactPayload,
-    handler: sendContactEmails,
+    handler: processContactSubmission,
     successMessage: "Message delivered. Check your inbox for confirmation.",
   },
   {
     path: "/api/newsletter",
     parse: parseNewsletterPayload,
-    handler: handleNewsletterSubscription,
+    handler: processNewsletterSubscription,
     successMessage: "Subscribed! Check your email for confirmation.",
   },
 ];
@@ -89,6 +92,9 @@ export default defineConfig(({ mode }) => {
   process.env.RESEND_API_KEY ??= env.RESEND_API_KEY;
   process.env.RESEND_FROM_EMAIL ??= env.RESEND_FROM_EMAIL;
   process.env.CONTACT_TO_EMAIL ??= env.CONTACT_TO_EMAIL;
+  process.env.SUPABASE_URL ??= env.SUPABASE_URL;
+  process.env.SUPABASE_SERVICE_ROLE_KEY ??= env.SUPABASE_SERVICE_ROLE_KEY;
+  process.env.SUPABASE_ANON_KEY ??= env.SUPABASE_ANON_KEY;
 
   return {
     server: {

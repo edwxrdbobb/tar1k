@@ -7,13 +7,14 @@ import {
   InviteNov21OrganizerEmail,
 } from '../emails/invite-nov21-emails';
 import { getSupabaseClient } from './_shared/supabase';
-import { getContactEmail, getFromEmail, getResendClient } from './_shared/resend';
+import { getContactEmails, getFromEmail, getResendClient } from './_shared/resend';
 
 export interface InviteNov21Payload {
   fullName: string;
   email: string;
   phone: string;
-  designation: string;
+  community: string;
+  affiliation: string;
 }
 
 export function parseInviteNov21Payload(input: unknown): InviteNov21Payload {
@@ -38,7 +39,8 @@ export function parseInviteNov21Payload(input: unknown): InviteNov21Payload {
     'fullName',
     'email',
     'phone',
-    'designation',
+    'community',
+    'affiliation',
   ];
 
   for (const field of requiredFields) {
@@ -51,7 +53,8 @@ export function parseInviteNov21Payload(input: unknown): InviteNov21Payload {
     fullName: String(body.fullName).trim(),
     email: String(body.email).trim(),
     phone: String(body.phone).trim(),
-    designation: String(body.designation).trim(),
+    community: String(body.community).trim(),
+    affiliation: String(body.affiliation).trim(),
   };
 
   for (const value of Object.values(sanitized)) {
@@ -92,7 +95,8 @@ async function persistInviteNov21Rsvp(payload: InviteNov21Payload) {
         full_name: payload.fullName,
         email: payload.email,
         phone: payload.phone,
-        designation: payload.designation,
+        community: payload.community,
+        affiliation: payload.affiliation,
         qr_token: qrToken,
         qr_payload: qrPayload,
         qr_png_data_url: qrCodeDataUrl,
@@ -114,7 +118,7 @@ export async function sendInviteNov21Emails(
   const resend = getResendClient();
   await resend.emails.send({
     from: getFromEmail(),
-    to: [getContactEmail()],
+    to: getContactEmails(),
     reply_to: payload.email,
     subject: `New RSVP — ${payload.fullName}`,
     react: InviteNov21OrganizerEmail({ ...payload, qrToken: context.qrToken }),
@@ -131,6 +135,11 @@ export async function sendInviteNov21Emails(
   });
 }
 
+export async function processInviteNov21(payload: InviteNov21Payload) {
+  const qrDetails = await persistInviteNov21Rsvp(payload);
+  await sendInviteNov21Emails(payload, qrDetails);
+}
+
 export default async function handler(req: any, res: any) {
   if (req.method !== 'POST') {
     res.status(405).json({ error: 'Method Not Allowed' });
@@ -139,8 +148,7 @@ export default async function handler(req: any, res: any) {
 
   try {
     const payload = parseInviteNov21Payload(req.body);
-    const qrDetails = await persistInviteNov21Rsvp(payload);
-    await sendInviteNov21Emails(payload, qrDetails);
+    await processInviteNov21(payload);
     res.status(200).json({ success: true, message: 'RSVP submitted! Check your inbox for confirmation.' });
   } catch (error: any) {
     console.error(error);
