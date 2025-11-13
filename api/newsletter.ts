@@ -1,5 +1,5 @@
-import { getContactEmails, getFromEmail, getResendClient } from './_shared/resend';
-import { getSupabaseClient } from './_shared/supabase';
+import { getContactEmails, getFromEmail, getResendClient } from './_shared/resend.js';
+import { getSupabaseClient } from './_shared/supabase.js';
 
 export interface NewsletterPayload {
   email: string;
