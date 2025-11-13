@@ -119,7 +119,7 @@ export async function sendInviteNov21Emails(
   await resend.emails.send({
     from: getFromEmail(),
     to: getContactEmails(),
-    reply_to: payload.email,
+    replyTo: payload.email,
     subject: `New RSVP — ${payload.fullName}`,
     react: InviteNov21OrganizerEmail({ ...payload, qrToken: context.qrToken }),
   });

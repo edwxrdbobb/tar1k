@@ -59,7 +59,7 @@ export async function sendContactEmails(payload: ContactPayload) {
   await resend.emails.send({
     from,
     to,
-    reply_to: payload.email,
+    replyTo: payload.email,
     subject: `[Contact] ${payload.name} via TAR1K`,
     html: `<p><strong>Name:</strong> ${payload.name}</p>
            <p><strong>Email:</strong> ${payload.email}</p>
