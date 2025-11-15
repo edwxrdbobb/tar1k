@@ -51,7 +51,7 @@ export const InviteNov21GuestEmail = ({
 }: InviteNov21EmailProps) => (
   <Html>
     <Head />
-    <Preview>Your spot is reserved — Nothing Too Serious</Preview>
+    <Preview>Your spot is reserved �?" Nothing Too Serious</Preview>
     <Body style={{ backgroundColor: '#050505', padding: '32px 0', fontFamily: baseFont }}>
       <Container
         style={{
@@ -66,18 +66,18 @@ export const InviteNov21GuestEmail = ({
       >
         <Section style={{ ...baseTextStyles, color: '#f6f6f6', fontSize: 16 }}>
           <div style={{ ...badgeStyle, backgroundColor: '#f6e05e', color: '#090909' }}>
-            You’re In
+            You�?Tre In
           </div>
           <Text style={{ fontSize: 32, fontWeight: 800, margin: '18px 0 10px' }}>
             Nothing Too Serious
           </Text>
           <Text style={{ marginBottom: 16 }}>
             Thank you, {fullName.split(' ')[0] || fullName}, for confirming your attendance at
-            Nothing Too Serious — an evening of music, poetry, film, and conversation curated by
+            Nothing Too Serious �?" an evening of music, poetry, film, and conversation curated by
             tar1k.
           </Text>
           <Text style={{ marginBottom: 16 }}>
-            This is a moment suspended between reflection and becoming — a celebration of effort,
+            This is a moment suspended between reflection and becoming �?" a celebration of effort,
             collaboration, and authenticity. Come open, come curious, and come ready to enjoy art
             for its own sake.
           </Text>
@@ -93,9 +93,9 @@ export const InviteNov21GuestEmail = ({
             <Text style={{ fontWeight: 600, textTransform: 'uppercase', letterSpacing: 1.5, marginBottom: 12 }}>
               Event Details
             </Text>
-            <Text style={{ margin: 0 }}>📍 Venue: Freetown Aqua Sports Club</Text>
-            <Text style={{ margin: '6px 0' }}>📅 Date: Friday, 21st November</Text>
-            <Text style={{ margin: 0 }}>⏰ Time: 7:00 PM – 10:00 PM</Text>
+            <Text style={{ margin: 0 }}>dY"? Venue: Freetown Aqua Sports Club</Text>
+            <Text style={{ margin: '6px 0' }}>dY". Date: Friday, 21st November</Text>
+            <Text style={{ margin: 0 }}>�?� Time: 7:00 PM �?" 10:00 PM</Text>
           </Section>
           <Section
             style={{
@@ -109,15 +109,15 @@ export const InviteNov21GuestEmail = ({
               Evening Flow
             </Text>
             <ul style={{ paddingLeft: 18, margin: 0 }}>
-              <li>7:00 – 7:45 | Arrivals &amp; Welcome</li>
-              <li>8:00 – 8:20 | First Performance</li>
-              <li>8:30 – 9:00 | “Before You Wake” — Film Screening</li>
-              <li>9:10 – 9:30 | Fireside Conversation</li>
-              <li>9:35 – 10:00 | Final Performance</li>
+              <li>7:00 �?" 7:45 | Arrivals &amp; Welcome</li>
+              <li>8:00 �?" 8:20 | First Performance</li>
+              <li>8:30 �?" 9:00 | �?oBefore You Wake�?? �?" Film Screening</li>
+              <li>9:10 �?" 9:30 | Fireside Conversation</li>
+              <li>9:35 �?" 10:00 | Final Performance</li>
             </ul>
           </Section>
           <Text style={{ marginBottom: 20 }}>
-            Dress Code: Come comfortable. It’s Nothing Too Serious.
+            Dress Code: Come comfortable. It�?Ts Nothing Too Serious.
           </Text>
           {qrCodeDataUrl ? (
             <Section
@@ -141,7 +141,7 @@ export const InviteNov21GuestEmail = ({
                 style={{ display: 'block', margin: '0 auto 12px' }}
               />
               <Text style={{ fontSize: 13, color: '#d1d1d1' }}>
-                We’ll scan it to verify your RSVP at the entrance.
+                We�?Tll scan it to verify your RSVP at the entrance.
               </Text>
             </Section>
           ) : null}

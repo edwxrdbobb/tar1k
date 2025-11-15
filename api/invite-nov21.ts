@@ -5,7 +5,7 @@ import QRCode from 'qrcode';
 import {
   InviteNov21GuestEmail,
   InviteNov21OrganizerEmail,
-} from '../emails/invite-nov21-emails.js';
+} from './_emails/invite-nov21-emails.js';
 import { getSupabaseClient } from './_shared/supabase.js';
 import { getContactEmails, getFromEmail, getResendClient } from './_shared/resend.js';
 
