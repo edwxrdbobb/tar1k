@@ -162,7 +162,7 @@ export default function InviteNov21() {
                   Date
                 </dt>
                 <dd className="text-base text-gray-50">
-                  Thursday, November 21st, 2024
+                  Friday, November 21st, 2024
                 </dd>
               </div>
               <div>
@@ -204,7 +204,7 @@ export default function InviteNov21() {
           </div>
 
           <div className="rounded-3xl border border-white/5 bg-white/5 bg-gradient-to-br from-white/5 via-transparent to-transparent p-6 shadow-2xl shadow-black/40 backdrop-blur">
-            <h3 className="text-lg font-semibold text-amber-200">Flow of Events</h3>
+            <h3 className="text-lg font-semibold text-amber-200">Flow of Event</h3>
             <ul className="mt-6 space-y-5">
               {flowOfEvents.map((event) => (
                 <li key={event.time}>
