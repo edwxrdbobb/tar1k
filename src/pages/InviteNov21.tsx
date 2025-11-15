@@ -15,6 +15,7 @@ import {
 } from '@/components/ui/select';
 import { SparklesText } from '@/components/ui/sparkles-text';
 import { Typewriter } from '@/components/ui/typewriter-text';
+type ApiResponse = { success?: boolean; message?: string; error?: string };
 
 const COMMUNITY_OPTIONS = [
   'The Maker (Fellow artists, designers, musicians)',
@@ -94,16 +95,30 @@ export default function InviteNov21() {
         body: JSON.stringify(formData),
       });
 
-      const data = await res.json();
+      const contentType = res.headers.get('content-type') || '';
+      let data: ApiResponse | null = null;
+      let text: string | null = null;
 
-      if (!res.ok) throw new Error(data.error ?? `HTTP ${res.status}`);
+      if (contentType.includes('application/json')) {
+        data = await res.json().catch(() => null);
+      } else {
+        text = await res.text().catch(() => null);
+      }
 
-      setMessage(data?.message ?? 'RSVP submitted! Check your inbox.');
+      if (!res.ok || !data?.success) {
+        const msg = data?.error
+          ? `${String(data.error)}${data?.details ? ` — ${String(data.details)}` : ''}`
+          : text || `HTTP ${res.status}`;
+        throw new Error(msg);
+      }
+
+      setMessage((data?.message as string) ?? 'RSVP submitted! Check your inbox.');
       setFormData(initialFormState);
       setHasConfirmed(false);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
-      setMessage(`Failed: ${err.message}`);
+      const msg = err instanceof Error ? err.message : 'Unknown error';
+      setMessage(`Failed: ${msg}`);
     } finally {
       setIsLoading(false);
     }
