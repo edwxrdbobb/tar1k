@@ -162,7 +162,7 @@ export default function InviteNov21() {
                   Date
                 </dt>
                 <dd className="text-base text-gray-50">
-                  Friday, November 21st, 2024
+                  Friday, November 21st, 2025
                 </dd>
               </div>
               <div>
