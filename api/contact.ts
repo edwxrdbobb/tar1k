@@ -1,5 +1,6 @@
 import { getContactEmails, getFromEmail, getResendClient } from './_shared/resend.js';
 import { getSupabaseClient } from './_shared/supabase.js';
+const isSupabaseEnabled = process.env.ENABLE_SUPABASE === 'true';
 
 export interface ContactPayload {
   name: string;
@@ -39,6 +40,11 @@ export function parseContactPayload(input: unknown): ContactPayload {
 }
 
 async function persistContactMessage(payload: ContactPayload) {
+  if (!isSupabaseEnabled) {
+    console.warn('[supabase] ENABLE_SUPABASE is not set to true; skipping contact persistence');
+    return;
+  }
+
   const supabase = getSupabaseClient();
   const { error } = await supabase.from('contact_messages').insert({
     name: payload.name,

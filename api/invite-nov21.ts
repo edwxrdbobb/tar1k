@@ -8,6 +8,7 @@ import {
 } from './_emails/invite-nov21-emails.js';
 import { getSupabaseClient } from './_shared/supabase.js';
 import { getContactEmails, getFromEmail, getResendClient } from './_shared/resend.js';
+const isSupabaseEnabled = process.env.ENABLE_SUPABASE === 'true';
 
 export interface InviteNov21Payload {
   fullName: string;
@@ -70,7 +71,6 @@ interface InviteNov21EmailContext {
 }
 
 async function persistInviteNov21Rsvp(payload: InviteNov21Payload) {
-  const supabase = getSupabaseClient();
   const qrToken = randomUUID();
 
   const qrPayload = JSON.stringify({
@@ -88,6 +88,12 @@ async function persistInviteNov21Rsvp(payload: InviteNov21Payload) {
     },
   });
 
+  if (!isSupabaseEnabled) {
+    console.warn('[supabase] ENABLE_SUPABASE is not set to true; skipping RSVP persistence');
+    return { qrCodeDataUrl, qrToken };
+  }
+
+  const supabase = getSupabaseClient();
   const { error } = await supabase
     .from('invite_nov21_rsvps')
     .upsert(
