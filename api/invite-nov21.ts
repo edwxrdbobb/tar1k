@@ -8,7 +8,14 @@ import {
 } from './_emails/invite-nov21-emails.js';
 import { getSupabaseClient } from './_shared/supabase.js';
 import { getContactEmails, getFromEmail, getResendClient } from './_shared/resend.js';
+
 const isSupabaseEnabled = process.env.ENABLE_SUPABASE === 'true';
+const isSupabaseConfigured = Boolean(
+  process.env.SUPABASE_URL &&
+    (process.env.SUPABASE_SERVICE_ROLE_KEY ||
+      process.env.SUPABASE_ANON_KEY ||
+      process.env.SUPABASE_API_KEY)
+);
 
 export interface InviteNov21Payload {
   fullName: string;
@@ -88,8 +95,10 @@ async function persistInviteNov21Rsvp(payload: InviteNov21Payload) {
     },
   });
 
-  if (!isSupabaseEnabled) {
-    console.warn('[supabase] ENABLE_SUPABASE is not set to true; skipping RSVP persistence');
+  if (!isSupabaseEnabled || !isSupabaseConfigured) {
+    console.warn(
+      '[supabase] Skipping RSVP persistence; ENABLE_SUPABASE is not true or credentials are missing'
+    );
     return { qrCodeDataUrl, qrToken };
   }
 
