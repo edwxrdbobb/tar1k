@@ -101,14 +101,14 @@ export async function sendInviteNov21Emails(payload: InviteNov21Payload) {
     from: getFromEmail(),
     to: getContactEmails(),
     replyTo: payload.email,
-    subject: `New RSVP �?" ${payload.fullName}`,
+    subject: `New RSVP - ${payload.fullName}`,
     react: InviteNov21OrganizerEmail(payload),
   });
 
   await resend.emails.send({
     from: getFromEmail(),
     to: [payload.email],
-    subject: 'Your Spot is Reserved �?" Nothing Too Serious',
+    subject: 'Your Spot is Reserved - Nothing Too Serious',
     react: InviteNov21GuestEmail(payload),
   });
 }
