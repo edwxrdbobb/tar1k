@@ -27,7 +27,7 @@ const NewsletterSection = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email }),
       });
-      const data = await res.json().catch(() => ({}));
+      const data = await res.json().catch(() => ({})); 
       if (!res.ok || !data?.success) throw new Error(data?.error || 'Failed');
 
       toast({

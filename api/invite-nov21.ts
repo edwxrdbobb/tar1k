@@ -1,7 +1,3 @@
-import { randomUUID } from 'node:crypto';
-
-import QRCode from 'qrcode';
-
 import {
   InviteNov21GuestEmail,
   InviteNov21OrganizerEmail,
@@ -72,34 +68,12 @@ export function parseInviteNov21Payload(input: unknown): InviteNov21Payload {
   return sanitized;
 }
 
-interface InviteNov21EmailContext {
-  qrCodeDataUrl: string;
-  qrToken: string;
-}
-
 async function persistInviteNov21Rsvp(payload: InviteNov21Payload) {
-  const qrToken = randomUUID();
-
-  const qrPayload = JSON.stringify({
-    type: 'invite-nov21',
-    email: payload.email,
-    token: qrToken,
-  });
-
-  const qrCodeDataUrl = await QRCode.toDataURL(qrPayload, {
-    width: 256,
-    margin: 2,
-    color: {
-      dark: '#111111',
-      light: '#ffffff',
-    },
-  });
-
   if (!isSupabaseEnabled || !isSupabaseConfigured) {
     console.warn(
       '[supabase] Skipping RSVP persistence; ENABLE_SUPABASE is not true or credentials are missing'
     );
-    return { qrCodeDataUrl, qrToken };
+    return;
   }
 
   const supabase = getSupabaseClient();
@@ -112,9 +86,6 @@ async function persistInviteNov21Rsvp(payload: InviteNov21Payload) {
         phone: payload.phone,
         community: payload.community,
         affiliation: payload.affiliation,
-        qr_token: qrToken,
-        qr_payload: qrPayload,
-        qr_png_data_url: qrCodeDataUrl,
       },
       { onConflict: 'email' }
     );
@@ -122,37 +93,29 @@ async function persistInviteNov21Rsvp(payload: InviteNov21Payload) {
   if (error) {
     throw new Error(`Failed to store RSVP: ${error.message}`);
   }
-
-  return { qrCodeDataUrl, qrToken };
 }
 
-export async function sendInviteNov21Emails(
-  payload: InviteNov21Payload,
-  context: InviteNov21EmailContext
-) {
+export async function sendInviteNov21Emails(payload: InviteNov21Payload) {
   const resend = getResendClient();
   await resend.emails.send({
     from: getFromEmail(),
     to: getContactEmails(),
     replyTo: payload.email,
-    subject: `New RSVP — ${payload.fullName}`,
-    react: InviteNov21OrganizerEmail({ ...payload, qrToken: context.qrToken }),
+    subject: `New RSVP �?" ${payload.fullName}`,
+    react: InviteNov21OrganizerEmail(payload),
   });
 
   await resend.emails.send({
     from: getFromEmail(),
     to: [payload.email],
-    subject: 'Your Spot is Reserved — Nothing Too Serious',
-    react: InviteNov21GuestEmail({
-      ...payload,
-      qrCodeDataUrl: context.qrCodeDataUrl,
-    }),
+    subject: 'Your Spot is Reserved �?" Nothing Too Serious',
+    react: InviteNov21GuestEmail(payload),
   });
 }
 
 export async function processInviteNov21(payload: InviteNov21Payload) {
-  const qrDetails = await persistInviteNov21Rsvp(payload);
-  await sendInviteNov21Emails(payload, qrDetails);
+  await persistInviteNov21Rsvp(payload);
+  await sendInviteNov21Emails(payload);
 }
 
 export default async function handler(req: any, res: any) {
@@ -164,7 +127,9 @@ export default async function handler(req: any, res: any) {
   try {
     const payload = parseInviteNov21Payload(req.body);
     await processInviteNov21(payload);
-    res.status(200).json({ success: true, message: 'RSVP submitted! Check your inbox for confirmation.' });
+    res
+      .status(200)
+      .json({ success: true, message: 'RSVP submitted! Check your inbox for confirmation.' });
   } catch (error: any) {
     console.error(error);
     const isBadRequest = /Missing required fields|Invalid JSON payload|Invalid payload format/.test(
