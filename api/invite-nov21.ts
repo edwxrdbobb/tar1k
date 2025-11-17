@@ -1,7 +1,3 @@
-import {
-  InviteNov21GuestEmail,
-  InviteNov21OrganizerEmail,
-} from './_emails/invite-nov21-emails.js';
 import { getSupabaseClient } from './_shared/supabase.js';
 import { getContactEmails, getFromEmail, getResendClient } from './_shared/resend.js';
 
@@ -97,19 +93,44 @@ async function persistInviteNov21Rsvp(payload: InviteNov21Payload) {
 
 export async function sendInviteNov21Emails(payload: InviteNov21Payload) {
   const resend = getResendClient();
-  await resend.emails.send({
-    from: getFromEmail(),
-    to: getContactEmails(),
-    replyTo: payload.email,
-    subject: `New RSVP - ${payload.fullName}`,
-    react: InviteNov21OrganizerEmail(payload),
-  });
+  const from = getFromEmail();
+  const to = getContactEmails();
+
+  const organizerHtml = `
+    <h2>New RSVP - Nothing Too Serious</h2>
+    <p><strong>Name:</strong> ${payload.fullName}</p>
+    <p><strong>Email:</strong> ${payload.email}</p>
+    <p><strong>Phone:</strong> ${payload.phone}</p>
+    <p><strong>Community:</strong> ${payload.community}</p>
+    <p><strong>Affiliation:</strong> ${payload.affiliation}</p>
+  `;
 
   await resend.emails.send({
-    from: getFromEmail(),
+    from,
+    to,
+    replyTo: payload.email,
+    subject: `New RSVP - ${payload.fullName}`,
+    html: organizerHtml,
+  });
+
+  const firstName = payload.fullName.split(' ')[0] || payload.fullName;
+  const guestHtml = `
+    <p>Hi ${firstName},</p>
+    <p>Thank you for confirming your attendance at <strong>Nothing Too Serious</strong> &mdash; an evening of music, poetry, film, and conversation curated by tar1k.</p>
+    <p><strong>Event Details</strong><br/>
+    Venue: Freetown Aqua Sports Club<br/>
+    Date: Friday, 21st November<br/>
+    Time: 7:00 PM - 10:00 PM</p>
+    <p>Dress Code: Come comfortable. It's Nothing Too Serious.</p>
+    <p>We look forward to sharing this space with you.</p>
+    <p>Warmly,<br/>tar1k &amp; Team<br/>@onlytar1k</p>
+  `;
+
+  await resend.emails.send({
+    from,
     to: [payload.email],
     subject: 'Your Spot is Reserved - Nothing Too Serious',
-    react: InviteNov21GuestEmail(payload),
+    html: guestHtml,
   });
 }
 
