@@ -17,6 +17,7 @@ import Blog from "./pages/Blog";
     import RSVPPage from "./pages/RSVP";
     import Music from "./pages/Music";
     import InviteNov21 from "./pages/InviteNov21";
+    import InviteGeneral from "./pages/InviteGeneral";
     import PressKit from "./pages/PressKit";
 
 const queryClient = new QueryClient();
@@ -29,7 +30,7 @@ const App = () => (
       <BrowserRouter>
         <Navigation />
             <Routes>
-              <Route path="/" element={<Index />} />
+          <Route path="/" element={<Index />} />
           <Route path="/events" element={<Events />} />
           <Route path="/videos" element={<Video />} />
           <Route path="/gallery" element={<Gallery />} />
@@ -40,6 +41,7 @@ const App = () => (
           <Route path="/blog" element={<Blog />} />
           <Route path="/music" element={<Music />} />
           <Route path="/invite/nov21" element={<InviteNov21 />} />
+          <Route path="/invite/general" element={<InviteGeneral />} />
           <Route path="/press-kit" element={<PressKit />} />
 
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

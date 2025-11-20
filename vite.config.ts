@@ -7,6 +7,10 @@ import {
   processInviteNov21,
 } from "./api/invite-nov21";
 import {
+  parseInviteGeneralPayload,
+  processInviteGeneral,
+} from "./api/invite-general";
+import {
   parseContactPayload,
   processContactSubmission,
 } from "./api/contact";
@@ -21,6 +25,12 @@ const apiRoutes = [
     parse: parseInviteNov21Payload,
     handler: processInviteNov21,
     successMessage: "RSVP submitted! Check your inbox for confirmation.",
+  },
+  {
+    path: "/api/invite-general",
+    parse: parseInviteGeneralPayload,
+    handler: processInviteGeneral,
+    successMessage: "Signup submitted! Check your inbox for confirmation.",
   },
   {
     path: "/api/contact",
