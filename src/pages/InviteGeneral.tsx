@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -37,6 +37,8 @@ const resolveApiUrl = () => {
   return '/api/invite-general';
 };
 
+const resolveStatusUrl = () => `${resolveApiUrl().replace(/\/$/, '')}/status`;
+
 export default function InviteGeneral() {
   const initialFormState = {
     fullName: '',
@@ -50,6 +52,34 @@ export default function InviteGeneral() {
   const [isLoading, setIsLoading] = useState(false);
   const [hasConfirmed, setHasConfirmed] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
+  const [isClosed, setIsClosed] = useState(false);
+  const [remainingSlots, setRemainingSlots] = useState<number | null>(null);
+  const [isStatusLoading, setIsStatusLoading] = useState(true);
+
+  const fetchSignupStatus = useCallback(async () => {
+    setIsStatusLoading(true);
+    try {
+      const res = await fetch(resolveStatusUrl());
+      if (!res.ok) {
+        throw new Error(`Failed to load signup status (${res.status})`);
+      }
+      const data = await res.json();
+      setIsClosed(Boolean(data?.isClosed));
+      setRemainingSlots(
+        typeof data?.remaining === 'number' ? Math.max(0, data.remaining) : null
+      );
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsStatusLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    void fetchSignupStatus();
+  }, [fetchSignupStatus]);
+
+  const formDisabled = isClosed || isLoading;
 
   const inviteCopy = [
     'You’re invited to the culmination of a journey, a lifetime in the making. A synthesis of the sound, the poetry, the words, and the work that threads them all through the centre.',
@@ -74,6 +104,11 @@ export default function InviteGeneral() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setMessage(null);
+
+    if (isClosed) {
+      setMessage('Signups are currently closed.');
+      return;
+    }
 
     if (!formData.community) {
       setMessage('Please select your creative archetype before you sign up.');
@@ -114,6 +149,7 @@ export default function InviteGeneral() {
       setMessage((data?.message as string) ?? 'Signup submitted! Check your inbox.');
       setFormData(initialFormState);
       setHasConfirmed(false);
+      await fetchSignupStatus();
     } catch (err: unknown) {
       console.error(err);
       const msg = err instanceof Error ? err.message : 'Unknown error';
@@ -229,6 +265,17 @@ export default function InviteGeneral() {
             <p className="text-sm text-gray-400">
               Please complete the form below to secure your spot in the space.
             </p>
+            {isStatusLoading ? (
+              <p className="text-sm text-gray-500">Checking availability…</p>
+            ) : isClosed ? (
+              <p className="text-sm font-semibold text-red-400">
+                Signups are closed. We’ll reopen if more spots become available.
+              </p>
+            ) : typeof remainingSlots === 'number' ? (
+              <p className="text-sm text-emerald-300">
+                {remainingSlots} spot{remainingSlots === 1 ? '' : 's'} left.
+              </p>
+            ) : null}
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-6">
@@ -249,6 +296,7 @@ export default function InviteGeneral() {
                       required
                       value={formData[field]}
                       onChange={handleChange}
+                      disabled={formDisabled}
                       className="bg-white/5 text-gray-100 placeholder:text-gray-500"
                     />
                   </div>
@@ -264,11 +312,13 @@ export default function InviteGeneral() {
                   onValueChange={(value) =>
                     setFormData((prev) => ({ ...prev, community: value }))
                   }
+                  disabled={formDisabled}
                 >
                   <SelectTrigger
                     id="community"
                     aria-required="true"
                     className="mt-2 h-12 border-white/10 bg-white/5 text-gray-100"
+                    disabled={formDisabled}
                   >
                     <SelectValue placeholder="Select Your Creative Archetype" />
                   </SelectTrigger>
@@ -288,6 +338,7 @@ export default function InviteGeneral() {
                   checked={hasConfirmed}
                   onCheckedChange={(checked) => setHasConfirmed(Boolean(checked))}
                   aria-required="true"
+                  disabled={formDisabled}
                 />
                 <Label htmlFor="good-time" className="text-sm leading-relaxed text-gray-200">
                   I accept that by honoring this invitation, I confirm my willingness to
@@ -298,7 +349,7 @@ export default function InviteGeneral() {
               <Button
                 type="submit"
                 className="w-full"
-                disabled={isLoading || !hasConfirmed}
+                disabled={isClosed || isLoading || !hasConfirmed}
               >
                 {isLoading ? 'Submitting…' : 'Submit Signup'}
               </Button>

@@ -8,6 +8,16 @@ const isSupabaseConfigured = Boolean(
       process.env.SUPABASE_ANON_KEY ||
       process.env.SUPABASE_API_KEY)
 );
+const GENERAL_SIGNUP_LIMIT = 15;
+
+class SignupLimitReachedError extends Error {
+  statusCode: number;
+  constructor() {
+    super('Signup limit reached');
+    this.name = 'SignupLimitReachedError';
+    this.statusCode = 409;
+  }
+}
 
 export interface InviteGeneralPayload {
   fullName: string;
@@ -59,6 +69,44 @@ export function parseInviteGeneralPayload(input: unknown): InviteGeneralPayload 
   }
 
   return sanitized;
+}
+
+async function fetchSignupCount(): Promise<number> {
+  if (!isSupabaseEnabled || !isSupabaseConfigured) {
+    return 0;
+  }
+
+  const supabase = getSupabaseClient();
+  const { count, error } = await supabase
+    .from('invite_general_signups')
+    .select('*', { count: 'exact', head: true });
+
+  if (error) {
+    throw new Error(`Failed to fetch signup count: ${error.message}`);
+  }
+
+  return count ?? 0;
+}
+
+export async function getInviteGeneralStatus() {
+  const currentCount = await fetchSignupCount();
+  const remaining = Math.max(GENERAL_SIGNUP_LIMIT - currentCount, 0);
+
+  return {
+    success: true,
+    limit: GENERAL_SIGNUP_LIMIT,
+    count: currentCount,
+    remaining,
+    isClosed: currentCount >= GENERAL_SIGNUP_LIMIT,
+  };
+}
+
+async function ensureSignupCapacity() {
+  const status = await getInviteGeneralStatus();
+  if (status.isClosed) {
+    throw new SignupLimitReachedError();
+  }
+  return status;
 }
 
 async function persistInviteGeneralSignup(payload: InviteGeneralPayload) {
@@ -180,11 +228,26 @@ export async function sendInviteGeneralEmails(payload: InviteGeneralPayload) {
 }
 
 export async function processInviteGeneral(payload: InviteGeneralPayload) {
+  await ensureSignupCapacity();
   await persistInviteGeneralSignup(payload);
   await sendInviteGeneralEmails(payload);
 }
 
 export default async function handler(req: any, res: any) {
+  if (req.method === 'GET') {
+    try {
+      const status = await getInviteGeneralStatus();
+      res.status(200).json(status);
+    } catch (error: any) {
+      console.error(error);
+      res.status(500).json({
+        error: 'Failed to load signup status',
+        details: error?.message ?? 'Unknown error',
+      });
+    }
+    return;
+  }
+
   if (req.method !== 'POST') {
     res.status(405).json({ error: 'Method Not Allowed' });
     return;
@@ -201,9 +264,11 @@ export default async function handler(req: any, res: any) {
     const isBadRequest = /Missing required fields|Invalid JSON payload|Invalid payload format/.test(
       error?.message ?? ''
     );
-    res.status(isBadRequest ? 400 : 500).json({
-      error: isBadRequest ? error.message : 'Failed to process signup',
-      details: isBadRequest ? undefined : error?.message ?? 'Unknown error',
+    const isSignupLimitError = error instanceof SignupLimitReachedError;
+    const status = isSignupLimitError ? error.statusCode : isBadRequest ? 400 : 500;
+    res.status(status).json({
+      error: isSignupLimitError ? error.message : isBadRequest ? error.message : 'Failed to process signup',
+      details: isBadRequest || isSignupLimitError ? undefined : error?.message ?? 'Unknown error',
     });
   }
 }

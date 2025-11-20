@@ -9,6 +9,7 @@ import {
 import {
   parseInviteGeneralPayload,
   processInviteGeneral,
+  getInviteGeneralStatus,
 } from "./api/invite-general";
 import {
   parseContactPayload,
@@ -19,27 +20,44 @@ import {
   processNewsletterSubscription,
 } from "./api/newsletter";
 
-const apiRoutes = [
+type ApiRoute = {
+  path: string;
+  method: "GET" | "POST";
+  parse?: (body: string) => any;
+  handler: (payload?: unknown) => Promise<any>;
+  successMessage?: string;
+};
+
+const apiRoutes: ApiRoute[] = [
   {
     path: "/api/invite-nov21",
+    method: "POST",
     parse: parseInviteNov21Payload,
     handler: processInviteNov21,
     successMessage: "RSVP submitted! Check your inbox for confirmation.",
   },
   {
     path: "/api/invite-general",
+    method: "POST",
     parse: parseInviteGeneralPayload,
     handler: processInviteGeneral,
     successMessage: "Signup submitted! Check your inbox for confirmation.",
   },
   {
+    path: "/api/invite-general/status",
+    method: "GET",
+    handler: getInviteGeneralStatus,
+  },
+  {
     path: "/api/contact",
+    method: "POST",
     parse: parseContactPayload,
     handler: processContactSubmission,
     successMessage: "Message delivered. Check your inbox for confirmation.",
   },
   {
     path: "/api/newsletter",
+    method: "POST",
     parse: parseNewsletterPayload,
     handler: processNewsletterSubscription,
     successMessage: "Subscribed! Check your email for confirmation.",
@@ -72,21 +90,31 @@ const inviteNov21DevPlugin = () => ({
         return;
       }
 
-      if (req.method !== "POST") {
+      if (req.method !== route.method) {
         sendJson(res, 405, { error: "Method Not Allowed" });
         return;
       }
 
       try {
-        const body = await readRawBody(req);
-        const payload = route.parse(body);
-        await route.handler(payload);
-        sendJson(res, 200, { success: true, message: route.successMessage });
+        let payload: unknown;
+        if (route.method !== "GET") {
+          const body = await readRawBody(req);
+          payload = route.parse ? route.parse(body) : body;
+        }
+        const result = await route.handler(payload);
+        const responsePayload =
+          result ??
+          (route.method === "GET"
+            ? { success: true }
+            : { success: true, message: route.successMessage });
+        sendJson(res, 200, responsePayload);
       } catch (error: any) {
-        const isBadRequest = /Missing required fields|Invalid JSON payload|Invalid payload format|Email is required/.test(
+        const statusFromError =
+          typeof error?.statusCode === "number" ? error.statusCode : undefined;
+        const isBadRequest = /Missing required fields|Invalid JSON payload|Invalid payload format|Email is required|Signup limit reached/.test(
           error?.message ?? "",
         );
-        const status = isBadRequest ? 400 : 500;
+        const status = statusFromError ?? (isBadRequest ? 400 : 500);
         sendJson(res, status, {
           error: isBadRequest ? error.message : "Failed to process request",
           details: isBadRequest ? undefined : error?.message ?? "Unknown error",
