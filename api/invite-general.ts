@@ -8,7 +8,7 @@ const isSupabaseConfigured = Boolean(
       process.env.SUPABASE_ANON_KEY ||
       process.env.SUPABASE_API_KEY)
 );
-const GENERAL_SIGNUP_LIMIT = 15;
+const GENERAL_SIGNUP_LIMIT = 31;
 
 class SignupLimitReachedError extends Error {
   statusCode: number;
